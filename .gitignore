@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+.venv/
+env/
+ENV/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Banco local
+*.db
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# Backups
+*.bak
+*.bak.*
+*.bak.encoding_fix
+*.bak.bloco4_quebrado
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Media / uploads
+backend/media/
+backend/uploads/
+
+# Migrations backup
+migrations/versions/*.bak.*
+
+# Temporários
+tmp/
+temp/
