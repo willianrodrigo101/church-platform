@@ -38,6 +38,9 @@ services:
       DEBUG: "False"
     ports:
       - "8000:8000"
+    volumes:
+      # 👇 MONTAR O FRONTEND COMO VOLUME — muda em tempo real!
+      - ./frontend:/app/frontend
 
 volumes:
   postgres_data:
