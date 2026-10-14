@@ -16,6 +16,7 @@ class PessoaBase(BaseModel):
     batizado: bool = False
     membro: bool = True
     observacoes: str | None = None
+    foto_url: str | None = Field(None, max_length=500)
 
 
 class PessoaCreate(PessoaBase):
@@ -34,6 +35,7 @@ class PessoaUpdate(BaseModel):
     batizado: bool | None = None
     membro: bool | None = None
     observacoes: str | None = None
+    foto_url: str | None = Field(None, max_length=500)
 
 
 class IgrejaResumo(BaseModel):
@@ -77,6 +79,7 @@ class PessoaCompleta(BaseModel):
     batizado: bool
     membro: bool
     observacoes: str | None = None
+    foto_url: str | None = None
     ativo: bool
     created_at: datetime
     updated_at: datetime
@@ -94,6 +97,7 @@ class Aniversariante(BaseModel):
     telefone: str | None = None
     email: str | None = None
     igreja_nome: str | None = None
+    foto_url: str | None = None
 
 
 class AniversariantesResumo(BaseModel):

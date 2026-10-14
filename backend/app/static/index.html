@@ -4679,6 +4679,83 @@
     .atencao-item { padding: 10px 12px; }
   }
 
+
+  /* ============ FOTO DE PERFIL ============ */
+  .foto-upload-area {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px;
+    background: var(--bg);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  .foto-preview {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    display: grid;
+    place-items: center;
+    font-size: 26px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .foto-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .foto-acoes {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+  .foto-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    width: fit-content;
+  }
+  .foto-btn:hover { background: var(--accent-hover); }
+  .foto-btn.remover {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+  }
+  .foto-btn.remover:hover { background: rgba(239,68,68,0.1); }
+  .foto-upload-input { display: none; }
+
+  /* Avatar de aniversariante com foto */
+  .aniv-avatar-foto {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2px solid var(--accent);
+    position: relative;
+  }
+  .aniv-avatar-foto.hoje { border-color: #ec4899; }
+  .aniv-avatar-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
 </style>
 
 
@@ -6067,6 +6144,25 @@
 
       </div>
 
+
+      <div class="form-group">
+        <label class="form-label">Foto de perfil</label>
+        <div class="foto-upload-area">
+          <div class="foto-preview" id="foto-preview">
+            <span id="foto-preview-icono">📷</span>
+          </div>
+          <div class="foto-acoes">
+            <label class="foto-btn" for="foto-upload-input">
+              📷 Escolher foto
+            </label>
+            <input type="file" class="foto-upload-input" id="foto-upload-input" accept="image/*" onchange="uploadFotoPessoa(this)">
+            <button type="button" class="foto-btn remover" id="foto-btn-remover" onclick="removerFotoPessoa()" style="display:none;">
+              🗑 Remover
+            </button>
+            <input type="hidden" id="form-pessoa-foto-url" name="foto_url">
+          </div>
+        </div>
+      </div>
 
       <div class="form-group"><label class="form-label">Observações</label><input class="form-input" name="observacoes"></div>
 
@@ -11235,6 +11331,90 @@ function toggleAtivaPessoa() {
 
 
 
+
+// ============ FOTO DE PERFIL ============
+async function uploadFotoPessoa(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+
+  // Limite de 5MB
+  if (file.size > 5 * 1024 * 1024) {
+    mostrarToast("❌ Imagem maior que 5 MB", "error");
+    inputEl.value = "";
+    return;
+  }
+
+  // Precisa ter um id de pessoa? Nao — vamos usar entidade_tipo="pessoa_foto" sem id
+  // O backend vai salvar e devolver o ID do anexo
+  const formData = new FormData();
+  formData.append("arquivo", file);
+  formData.append("entidade_tipo", "pessoa_foto");
+  // id temporario, o backend nao precisa validar pra esse tipo
+  formData.append("entidade_id", "00000000-0000-0000-0000-000000000000");
+
+  try {
+    const r = await fetch(`${API}/anexos/upload`, {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + getToken() },
+      body: formData,
+    });
+
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      throw new Error(err.detail || "Erro no upload");
+    }
+
+    const anexo = await r.json();
+    const fotoId = "anexo:" + anexo.id;
+
+    // Salva no campo hidden
+    document.getElementById("form-pessoa-foto-url").value = fotoId;
+
+    // Preview
+    const preview = document.getElementById("foto-preview");
+    preview.innerHTML = `<img src="${API}/anexos/${anexo.id}/download?token=${encodeURIComponent(getToken())}" alt="">`;
+
+    // Mostra botao remover
+    document.getElementById("foto-btn-remover").style.display = "inline-flex";
+
+    mostrarToast("✅ Foto carregada!", "success");
+    inputEl.value = "";
+  } catch (err) {
+    mostrarToast("❌ " + err.message, "error");
+    inputEl.value = "";
+  }
+}
+
+function removerFotoPessoa() {
+  document.getElementById("form-pessoa-foto-url").value = "";
+  const preview = document.getElementById("foto-preview");
+  preview.innerHTML = '<span id="foto-preview-icono">📷</span>';
+  document.getElementById("foto-btn-remover").style.display = "none";
+}
+
+function renderizarPreviewFoto(fotoUrl) {
+  const preview = document.getElementById("foto-preview");
+  const btnRemover = document.getElementById("foto-btn-remover");
+  if (!preview) return;
+
+  if (fotoUrl && fotoUrl.startsWith("anexo:")) {
+    const anexoId = fotoUrl.replace("anexo:", "");
+    preview.innerHTML = `<img src="${API}/anexos/${anexoId}/download?token=${encodeURIComponent(getToken())}" alt="">`;
+    if (btnRemover) btnRemover.style.display = "inline-flex";
+  } else {
+    preview.innerHTML = '<span id="foto-preview-icono">📷</span>';
+    if (btnRemover) btnRemover.style.display = "none";
+  }
+}
+
+function getFotoAvatarHtml(pessoa, classeExtra) {
+  const url = pessoa?.foto_url;
+  if (!url || !url.startsWith("anexo:")) return null;
+  const anexoId = url.replace("anexo:", "");
+  const src = `${API}/anexos/${anexoId}/download?token=${encodeURIComponent(getToken())}`;
+  return `<div class="aniv-avatar-foto ${classeExtra || ''}"><img src="${src}" alt=""></div>`;
+}
+
 // ============ USUARIOS ============
 
 
@@ -15359,7 +15539,10 @@ function renderAnivCard(p, tipo) {
   else if (p.dias_ate > 0) diasLabel = `Em ${p.dias_ate} dia${p.dias_ate !== 1 ? "s" : ""}`;
   else diasLabel = `Há ${Math.abs(p.dias_ate)} dia${Math.abs(p.dias_ate) !== 1 ? "s" : ""}`;
 
+  // Usa foto real se tiver, senao usa iniciais
+  const fotoHtml = getFotoAvatarHtml(p, tipo === "hoje" ? "hoje" : "");
   const classeAvatar = tipo === "hoje" ? "aniv-avatar-iniciais hoje" : "aniv-avatar-iniciais";
+  const avatarHtml = fotoHtml || `<div class="${classeAvatar}">${iniciais}</div>`;
 
   const telefone = p.telefone ? p.telefone.replace(/\D/g, "") : "";
   const linkWhats = telefone ? `https://wa.me/55${telefone}?text=Parab%C3%A9ns%20${encodeURIComponent(p.nome.split(" ")[0])}!%20Deus%20te%20aben%C3%A7oe%20muito!` : "";
@@ -15369,7 +15552,7 @@ function renderAnivCard(p, tipo) {
 
   return `
     <div class="aniv-card ${tipo === "hoje" ? "hoje" : ""}" onclick="abrirPerfilPessoa('${p.id}')" style="cursor:pointer;">
-      <div class="${classeAvatar}">${iniciais}</div>
+      ${avatarHtml}
       <div class="aniv-info">
         <div class="aniv-nome">${p.nome}</div>
         <div class="aniv-data">${dataFmt} · ${p.idade} anos</div>
