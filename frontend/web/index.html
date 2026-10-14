@@ -4479,6 +4479,206 @@
   }
 
 
+
+  /* ============ DASHBOARD REDESIGN ============ */
+  .dash-hero-versiculo {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+  .dash-versiculo-texto {
+    font-size: 14px;
+    font-style: italic;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .dash-versiculo-ref {
+    font-size: 11px;
+    color: rgba(255,255,255,0.65);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  /* Acoes rapidas */
+  .acoes-rapidas {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .acao-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 18px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+    color: var(--text);
+    text-align: center;
+  }
+  .acao-btn:hover {
+    border-color: var(--accent);
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+  }
+  .acao-icon {
+    font-size: 24px;
+    line-height: 1;
+  }
+  .acao-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    line-height: 1.3;
+  }
+
+  /* Card de atencao pastoral */
+  .atencao-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .atencao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .atencao-titulo {
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .atencao-ver-todos {
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .atencao-ver-todos:hover {
+    background: rgba(99,102,241,0.1);
+  }
+  .atencao-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .atencao-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--bg);
+    border-radius: 10px;
+    border-left: 3px solid transparent;
+  }
+  .atencao-item.alta { border-left-color: var(--danger); }
+  .atencao-item.media { border-left-color: var(--warning); }
+  .atencao-item.baixa { border-left-color: var(--success); }
+  .atencao-item-nome {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .atencao-item-motivo {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .atencao-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .atencao-badge.alta {
+    background: rgba(239,68,68,0.15);
+    color: var(--danger);
+  }
+  .atencao-badge.media {
+    background: rgba(245,158,11,0.15);
+    color: var(--warning);
+  }
+  .atencao-badge.baixa {
+    background: rgba(16,185,129,0.15);
+    color: var(--success);
+  }
+
+  /* Skeleton loading */
+  .skeleton {
+    background: linear-gradient(90deg, var(--bg-card) 0%, var(--bg-card-hover) 50%, var(--bg-card) 100%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+    border-radius: 8px;
+  }
+  @keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .skeleton-card {
+    height: 100px;
+    margin-bottom: 12px;
+  }
+  .skeleton-kpi {
+    height: 110px;
+  }
+  .skeleton-aniversariante {
+    height: 90px;
+  }
+
+  /* Avatar com iniciais (aniversariantes) */
+  .aniv-avatar-iniciais {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  }
+  .aniv-avatar-iniciais.hoje {
+    background: linear-gradient(135deg, #ec4899, #f472b6);
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .acoes-rapidas {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .acao-btn {
+      padding: 14px 10px;
+    }
+    .acao-icon { font-size: 22px; }
+    .acao-label { font-size: 11px; }
+    .dash-versiculo-texto { font-size: 12px; }
+    .dash-versiculo-ref { font-size: 10px; }
+    .atencao-card { padding: 16px; }
+    .atencao-item { padding: 10px 12px; }
+  }
+
 </style>
 
 
@@ -5121,120 +5321,71 @@
 
     <div id="conteudo-inicio">
 
-
+      <!-- ============ HERO ============ -->
       <div class="dash-hero">
-
-
         <div class="dash-hero-estrelas" id="dash-estrelas"></div>
-
-
         <div class="dash-hero-content">
-
-
           <div class="dash-hero-data" id="dash-data">—</div>
-
-
           <div class="dash-hero-title" id="dash-saudacao">Olá!</div>
-
-
           <div class="dash-hero-sub" id="dash-resumo">Carregando visão geral...</div>
 
-
-          <div class="dash-hero-acoes">
-
-
-            <button class="dash-hero-btn" onclick="trocarAba('cuidado'); setTimeout(abrirFormAcomp, 250);">🕊️ Novo Acompanhamento</button>
-
-
-            <button class="dash-hero-btn" onclick="trocarAba('oracao'); setTimeout(abrirFormOracao, 250);">🙏 Novo Pedido</button>
-
-
-            <button class="dash-hero-btn" onclick="trocarAba('pessoas'); setTimeout(abrirFormPessoa, 250);">👥 Nova Pessoa</button>
-
-
+          <div class="dash-hero-versiculo" id="dash-versiculo">
+            <div class="dash-versiculo-texto">"Entrega o teu caminho ao Senhor, confia nele, e ele o fará."</div>
+            <div class="dash-versiculo-ref">Salmo 37:5</div>
           </div>
-
-
         </div>
-
-
       </div>
 
-
-
-
-
-      <div class="kpi-grid" id="dashboard-kpis"></div>
-
-
-
-
-
-      <div class="graficos-grid">
-
-
-        <div class="grafico-card">
-
-
-          <div class="grafico-titulo">👥 Pessoas</div>
-
-
-          <div class="grafico-canvas-wrap"><canvas id="chart-pessoas"></canvas></div>
-
-
-        </div>
-
-
-        <div class="grafico-card">
-
-
-          <div class="grafico-titulo">🕊️ Acompanhamentos</div>
-
-
-          <div class="grafico-canvas-wrap"><canvas id="chart-cuidado"></canvas></div>
-
-
-        </div>
-
-
-        <div class="grafico-card">
-
-
-          <div class="grafico-titulo">🙏 Orações</div>
-
-
-          <div class="grafico-canvas-wrap"><canvas id="chart-oracao"></canvas></div>
-
-
-        </div>
-
-
+      <!-- ============ ACOES RAPIDAS ============ -->
+      <div class="acoes-rapidas">
+        <button class="acao-btn" onclick="trocarAba('cuidado'); setTimeout(abrirFormAcomp, 250);">
+          <span class="acao-icon">🕊️</span>
+          <span class="acao-label">Novo Acompanhamento</span>
+        </button>
+        <button class="acao-btn" onclick="trocarAba('pessoas'); setTimeout(abrirFormPessoa, 250);">
+          <span class="acao-icon">👥</span>
+          <span class="acao-label">Nova Pessoa</span>
+        </button>
+        <button class="acao-btn" onclick="trocarAba('oracao'); setTimeout(abrirFormOracao, 250);">
+          <span class="acao-icon">🙏</span>
+          <span class="acao-label">Novo Pedido</span>
+        </button>
+        <button class="acao-btn" onclick="trocarAba('cuidado')">
+          <span class="acao-icon">📋</span>
+          <span class="acao-label">Ver todos</span>
+        </button>
       </div>
 
-
-
-
-
+      <!-- ============ ANIVERSARIANTES (TOPO) ============ -->
       <div id="dashboard-aniversariantes"></div>
 
+      <!-- ============ KPIs ============ -->
+      <div class="kpi-grid" id="dashboard-kpis"></div>
 
+      <!-- ============ ATENCAO PASTORAL ============ -->
+      <div id="dashboard-atencao"></div>
 
+      <!-- ============ GRAFICOS (restrito por role) ============ -->
+      <div class="graficos-grid" id="dashboard-graficos">
+        <div class="grafico-card">
+          <div class="grafico-titulo">👥 Pessoas</div>
+          <div class="grafico-canvas-wrap"><canvas id="chart-pessoas"></canvas></div>
+        </div>
+        <div class="grafico-card">
+          <div class="grafico-titulo">🕊️ Acompanhamentos</div>
+          <div class="grafico-canvas-wrap"><canvas id="chart-cuidado"></canvas></div>
+        </div>
+        <div class="grafico-card">
+          <div class="grafico-titulo">🙏 Orações</div>
+          <div class="grafico-canvas-wrap"><canvas id="chart-oracao"></canvas></div>
+        </div>
+      </div>
 
-
+      <!-- ============ ATIVIDADES RECENTES ============ -->
       <div class="timeline-titulo">📋 Atividades recentes</div>
-
-
       <div id="dashboard-atividades" class="timeline-lista"></div>
 
-
     </div>
-
-
-
-
-
-
-
 
     <!-- ABA EVENTOS -->
 
@@ -12153,257 +12304,208 @@ function tempoRelativo(dataStr) {
 
 
 async function carregarDashboard() {
-
-
   aplicarTemaSalvo();
-
-
   setTimeout(gerarEstrelas, 50);
 
-
-  setTimeout(agendarMeteoritos, 5000);
-
-
   const kpis = document.getElementById("dashboard-kpis");
-
-
   const atividades = document.getElementById("dashboard-atividades");
-
-
+  const atencao = document.getElementById("dashboard-atencao");
+  const graficos = document.getElementById("dashboard-graficos");
   if (!kpis) return;
 
-
-
-
-
   const user = getUser();
-
-
   document.getElementById("dash-data").textContent = dataPorExtenso();
-
-
   document.getElementById("dash-saudacao").textContent = `${saudacaoPorHora()}, ${user?.nome?.split(" ")[0] || "—"}!`;
 
-
-
-
-
-  kpis.innerHTML = `<div class="state" style="grid-column: 1/-1;"><div class="state-icon">⏳</div><div class="state-text">Carregando...</div></div>`;
-
-
-  atividades.innerHTML = "";
-
-
-
-
-
-  try {
-
-
-    const r = await apiFetch(`${API}/dashboard/geral`);
-
-
-    const d = await r.json();
-
-
-
-
-
-    document.getElementById("dash-resumo").textContent =
-
-
-      `${d.pessoas.total} pessoas na igreja · ${d.cuidado.pendentes} acompanhamentos em aberto · ${d.oracao.abertos + d.oracao.em_oracao} pedidos de oração`;
-
-
-
-
-
-    const cards = [
-
-
-      { icon: "🏛️", cor: "azul", valor: d.igrejas.total, label: "Igrejas", detalhe: `${d.igrejas.ativas} ativa${d.igrejas.ativas !== 1 ? "s" : ""}` },
-
-
-      { icon: "👥", cor: "roxo", valor: d.pessoas.total, label: "Pessoas", detalhe: `${d.pessoas.membros} membros · ${d.pessoas.visitantes} visitantes` },
-
-
-      { icon: "🕊️", cor: "amarelo", valor: d.cuidado.pendentes, label: "Acompanhamentos", detalhe: `${d.cuidado.vencidos} vencido${d.cuidado.vencidos !== 1 ? "s" : ""} · ${d.cuidado.retornos_7d} retorno${d.cuidado.retornos_7d !== 1 ? "s" : ""}` },
-
-
-      { icon: "🙏", cor: "verde", valor: d.oracao.abertos + d.oracao.em_oracao, label: "Orações em aberto", detalhe: `${d.oracao.atendidos} atendida${d.oracao.atendidos !== 1 ? "s" : ""}` },
-
-
-      { icon: "⏰", cor: "vermelho", valor: d.pessoas.sem_interacao_30d, label: "Sem interação 30d+", detalhe: "Precisam de atenção" },
-
-
-    ];
-
-
-
-
-
-    kpis.innerHTML = cards.map(c => `
-
-
-      <div class="kpi-card ${c.cor}">
-
-
-        <div class="kpi-header">
-
-
-          <div class="kpi-icon ${c.cor}">${c.icon}</div>
-
-
-        </div>
-
-
-        <div class="kpi-valor" style="color: ${CORES[c.cor]};">${c.valor}</div>
-
-
-        <div class="kpi-label">${c.label}</div>
-
-
-        <div class="kpi-detalhe">${c.detalhe}</div>
-
-
-      </div>
-
-
-    `).join("");
-
-
-
-
-
-    // ============ GRAFICOS ============
-
-
-    desenharGraficoPessoas(d);
-
-
-    desenharGraficoCuidado(d);
-
-
-    desenharGraficoOracao(d);
-
-
-    carregarAniversariantes();
-
-
-
-
-
-    // ============ TIMELINE ============
-
-
-    if (d.atividades_recentes.length === 0) {
-
-
-      atividades.innerHTML = `<div class="state"><div class="state-icon">📭</div><div class="state-text">Nenhuma atividade recente.</div></div>`;
-
-
-    } else {
-
-
-      const statusLabel = {
-
-
-        pendente: "Pendente", em_andamento: "Em andamento", concluido: "Concluído", cancelado: "Cancelado",
-
-
-        aberto: "Aberto", em_oracao: "Em oração", atendido: "Atendido", arquivado: "Arquivado",
-
-
-      };
-
-
-      const statusCor = {
-
-
-        pendente: "amarelo", em_andamento: "azul", concluido: "verde", cancelado: "cinza",
-
-
-        aberto: "amarelo", em_oracao: "azul", atendido: "verde", arquivado: "cinza",
-
-
-      };
-
-
-      atividades.innerHTML = d.atividades_recentes.map(a => {
-
-
-        const cor = statusCor[a.status] || "cinza";
-
-
-        const iconClass = a.tipo === "oracao" ? "oracao" : "acomp";
-
-
-        const icon = a.tipo === "oracao" ? "🙏" : "🕊️";
-
-
-        return `
-
-
-          <div class="timeline-item">
-
-
-            <div class="timeline-icon ${iconClass}">${icon}</div>
-
-
-            <div class="timeline-corpo">
-
-
-              <div class="timeline-tit">
-
-
-                ${a.titulo}
-
-
-                ${a.sigiloso ? '<span class="card-tag" style="background:rgba(239,68,68,0.15);color:var(--danger);font-size:10px;">SIGILOSO</span>' : ""}
-
-
-              </div>
-
-
-              <div class="timeline-sub">${a.subtitulo || "—"}</div>
-
-
-            </div>
-
-
-            <div class="timeline-meta">
-
-
-              <div class="timeline-tempo">${tempoRelativo(a.data)}</div>
-
-
-              <div class="timeline-status" style="background: ${CORES[cor]}22; color: ${CORES[cor]};">${statusLabel[a.status] || a.status}</div>
-
-
-            </div>
-
-
-          </div>
-
-
-        `;
-
-
-      }).join("");
-
-
-    }
-
-
-  } catch (e) {
-
-
-    kpis.innerHTML = `<div class="state" style="grid-column: 1/-1;"><div class="state-icon">⚠️</div><div class="state-text">${e.message}</div></div>`;
-
-
+  // Versiculo aleatorio
+  const versiculoEl = document.getElementById("dash-versiculo");
+  if (versiculoEl) {
+    const v = escolherVersiculo();
+    versiculoEl.innerHTML = `
+      <div class="dash-versiculo-texto">"${v.texto}"</div>
+      <div class="dash-versiculo-ref">${v.ref}</div>
+    `;
   }
 
+  // Skeleton
+  kpis.innerHTML = Array(5).fill('<div class="skeleton skeleton-kpi"></div>').join("");
+  atividades.innerHTML = '<div class="skeleton" style="height: 80px;"></div>';
+  if (atencao) atencao.innerHTML = '<div class="skeleton skeleton-card"></div>';
 
+  try {
+    const r = await apiFetch(`${API}/dashboard/geral`);
+    const d = await r.json();
+
+    document.getElementById("dash-resumo").textContent =
+      `${d.pessoas.total} pessoas na igreja · ${d.cuidado.pendentes} acompanhamentos em aberto · ${d.oracao.abertos + d.oracao.em_oracao} pedidos de oração`;
+
+    // KPIs
+    const cards = [
+      { icon: "🏛️", cor: "azul", valor: d.igrejas.total, label: "Igrejas", detalhe: `${d.igrejas.ativas} ativa${d.igrejas.ativas !== 1 ? "s" : ""}` },
+      { icon: "👥", cor: "roxo", valor: d.pessoas.total, label: "Pessoas", detalhe: `${d.pessoas.membros} membros · ${d.pessoas.visitantes} visitantes` },
+      { icon: "🕊️", cor: "amarelo", valor: d.cuidado.pendentes, label: "Acompanhamentos", detalhe: `${d.cuidado.vencidos} vencido${d.cuidado.vencidos !== 1 ? "s" : ""}` },
+      { icon: "🙏", cor: "verde", valor: d.oracao.abertos + d.oracao.em_oracao, label: "Orações em aberto", detalhe: `${d.oracao.atendidos} atendida${d.oracao.atendidos !== 1 ? "s" : ""}` },
+      { icon: "⏰", cor: "vermelho", valor: d.pessoas.sem_interacao_30d, label: "Sem interação 30d+", detalhe: "Precisam de atenção" },
+    ];
+
+    kpis.innerHTML = cards.map(c => `
+      <div class="kpi-card ${c.cor}">
+        <div class="kpi-header">
+          <div class="kpi-icon ${c.cor}">${c.icon}</div>
+        </div>
+        <div class="kpi-valor" style="color: ${CORES[c.cor]};">${c.valor}</div>
+        <div class="kpi-label">${c.label}</div>
+        <div class="kpi-detalhe">${c.detalhe}</div>
+      </div>
+    `).join("");
+
+    // Graficos (restrito por role)
+    const role = user?.role || "membro";
+    const podeVerGraficos = ["admin", "pastor", "lider"].includes(role);
+    if (graficos) {
+      graficos.style.display = podeVerGraficos ? "grid" : "none";
+      if (podeVerGraficos) {
+        desenharGraficoPessoas(d);
+        desenharGraficoCuidado(d);
+        desenharGraficoOracao(d);
+      }
+    }
+
+    // Aniversariantes
+    carregarAniversariantes();
+
+    // Atencao pastoral
+    carregarAtencaoPastoral(d);
+
+    // Atividades
+    if (d.atividades_recentes.length === 0) {
+      atividades.innerHTML = `<div class="state"><div class="state-icon">📭</div><div class="state-text">Nenhuma atividade recente.</div></div>`;
+    } else {
+      const statusLabel = {
+        pendente: "Pendente", em_andamento: "Em andamento", concluido: "Concluído", cancelado: "Cancelado",
+        aberto: "Aberto", em_oracao: "Em oração", atendido: "Atendido", arquivado: "Arquivado",
+      };
+      const statusCor = {
+        pendente: "amarelo", em_andamento: "azul", concluido: "verde", cancelado: "cinza",
+        aberto: "amarelo", em_oracao: "azul", atendido: "verde", arquivado: "cinza",
+      };
+      atividades.innerHTML = d.atividades_recentes.map(a => {
+        const cor = statusCor[a.status] || "cinza";
+        const iconClass = a.tipo === "oracao" ? "oracao" : "acomp";
+        const icon = a.tipo === "oracao" ? "🙏" : "🕊️";
+        return `
+          <div class="timeline-item">
+            <div class="timeline-icon ${iconClass}">${icon}</div>
+            <div class="timeline-corpo">
+              <div class="timeline-tit">
+                ${a.titulo}
+                ${a.sigiloso ? '<span class="card-tag" style="background:rgba(239,68,68,0.15);color:var(--danger);font-size:10px;">SIGILOSO</span>' : ""}
+              </div>
+              <div class="timeline-sub">${a.subtitulo || "—"}</div>
+            </div>
+            <div class="timeline-meta">
+              <div class="timeline-tempo">${tempoRelativo(a.data)}</div>
+              <div class="timeline-status" style="background: ${CORES[cor]}22; color: ${CORES[cor]};">${statusLabel[a.status] || a.status}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+  } catch (e) {
+    kpis.innerHTML = `<div class="state" style="grid-column: 1/-1;"><div class="state-icon">⚠️</div><div class="state-text">${e.message}</div></div>`;
+    if (atencao) atencao.innerHTML = "";
+  }
+}
+
+// ============ VERSICULOS ============
+const VERSICULOS = [
+  { texto: "Entrega o teu caminho ao Senhor, confia nele, e ele o fará.", ref: "Salmo 37:5" },
+  { texto: "O Senhor é o meu pastor, nada me faltará.", ref: "Salmo 23:1" },
+  { texto: "Posso todas as coisas naquele que me fortalece.", ref: "Filipenses 4:13" },
+  { texto: "Tudo posso naquele que me fortalece.", ref: "Filipenses 4:13" },
+  { texto: "Confia no Senhor de todo o teu coração.", ref: "Provérbios 3:5" },
+  { texto: "Lâmpada para os meus pés é a tua palavra.", ref: "Salmo 119:105" },
+  { texto: "O Senhor é a minha luz e a minha salvação.", ref: "Salmo 27:1" },
+  { texto: "Vinde a mim, todos os que estais cansados.", ref: "Mateus 11:28" },
+  { texto: "Eu sou o caminho, a verdade e a vida.", ref: "João 14:6" },
+  { texto: "Buscai primeiro o reino de Deus.", ref: "Mateus 6:33" },
+];
+
+function escolherVersiculo() {
+  return VERSICULOS[Math.floor(Math.random() * VERSICULOS.length)];
+}
+
+// ============ ATENCAO PASTORAL ============
+async function carregarAtencaoPastoral(dadosDashboard) {
+  const div = document.getElementById("dashboard-atencao");
+  if (!div) return;
+
+  try {
+    const r = await apiFetch(`${API}/acompanhamentos/dashboard/alertas`);
+    const d = await r.json();
+
+    const pessoas = [];
+
+    // Pessoas sem interação (mais criticas primeiro)
+    (d.pessoas_sem_interacao || []).slice(0, 5).forEach(p => {
+      const dias = p.dias_sem_interacao || 0;
+      const nivel = dias >= 45 ? "alta" : dias >= 30 ? "media" : "baixa";
+      pessoas.push({
+        nome: p.nome || p.pessoa?.nome || "—",
+        motivo: `Sem interação há ${dias} dias`,
+        nivel,
+      });
+    });
+
+    // Acompanhamentos vencidos
+    (d.acompanhamentos_vencidos || []).slice(0, 5).forEach(a => {
+      const dias = a.dias_vencido || 0;
+      const nivel = dias >= 15 ? "alta" : dias >= 7 ? "media" : "baixa";
+      pessoas.push({
+        nome: a.pessoa?.nome || a.titulo || "—",
+        motivo: `Acompanhamento vencido há ${dias} dias`,
+        nivel,
+      });
+    });
+
+    if (pessoas.length === 0) {
+      div.innerHTML = `
+        <div class="atencao-card">
+          <div class="atencao-header">
+            <div class="atencao-titulo">🎯 Precisa de atenção</div>
+          </div>
+          <div style="text-align: center; padding: 20px; color: var(--text-muted); font-size: 13px;">
+            ✓ Tudo em ordem! Ninguém precisa de atenção especial hoje.
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    const top5 = pessoas.slice(0, 5);
+
+    div.innerHTML = `
+      <div class="atencao-card">
+        <div class="atencao-header">
+          <div class="atencao-titulo">🎯 Precisa de atenção hoje</div>
+          ${pessoas.length > 5 ? `<button class="atencao-ver-todos" onclick="trocarAba('cuidado')">Ver todos (${pessoas.length}) →</button>` : ""}
+        </div>
+        <div class="atencao-lista">
+          ${top5.map(p => `
+            <div class="atencao-item ${p.nivel}">
+              <div style="flex: 1; min-width: 0;">
+                <div class="atencao-item-nome">${p.nome}</div>
+                <div class="atencao-item-motivo">${p.motivo}</div>
+              </div>
+              <span class="atencao-badge ${p.nivel}">${p.nivel === "alta" ? "Alta" : p.nivel === "media" ? "Média" : "Baixa"}</span>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  } catch (e) {
+    div.innerHTML = "";
+  }
 }
 
 
@@ -15207,137 +15309,40 @@ async function carregarAniversariantes() {
 
 
 function renderizarAniversariantes() {
-
-
   const div = document.getElementById("dashboard-aniversariantes");
-
-
   if (!div || !aniversariantesCache) return;
 
-
-
-
-
   const d = aniversariantesCache;
-
-
   const total = d.total_hoje + d.total_semana + d.ultimos_7_dias.length;
 
-
-
-
-
   if (total === 0) {
-
-
     div.innerHTML = `
-
-
       <div class="aniv-secao-titulo">🎂 Aniversariantes</div>
-
-
-      <div class="aniv-empty">Nenhum aniversariante nos próximos 7 dias. Cadastre a data de nascimento das pessoas para ver aqui.</div>`;
-
-
+      <div class="aniv-empty">Nenhum aniversariante nos próximos 7 dias.</div>`;
     return;
-
-
   }
-
-
-
-
 
   let html = "";
 
-
-
-
-
-  // Hoje
-
-
   if (d.hoje.length > 0) {
-
-
     html += `<div class="aniv-secao-titulo">🎉 Aniversariantes de hoje</div><div class="aniv-grid">`;
-
-
-    for (const p of d.hoje) {
-
-
-      html += renderAnivCard(p, "hoje");
-
-
-    }
-
-
+    for (const p of d.hoje) html += renderAnivCard(p, "hoje");
     html += `</div>`;
-
-
   }
-
-
-
-
-
-  // Próximos 7 dias
-
 
   if (d.proximos_7_dias.length > 0) {
-
-
     html += `<div class="aniv-secao-titulo">🎂 Próximos 7 dias</div><div class="aniv-grid">`;
-
-
-    for (const p of d.proximos_7_dias) {
-
-
-      html += renderAnivCard(p, "futuro");
-
-
-    }
-
-
+    for (const p of d.proximos_7_dias) html += renderAnivCard(p, "futuro");
     html += `</div>`;
-
-
   }
-
-
-
-
-
-  // Últimos 7 dias
-
 
   if (d.ultimos_7_dias.length > 0) {
-
-
     html += `<div class="aniv-secao-titulo">📅 Fizeram nos últimos 7 dias</div><div class="aniv-grid">`;
-
-
-    for (const p of d.ultimos_7_dias) {
-
-
-      html += renderAnivCard(p, "passado");
-
-
-    }
-
-
+    for (const p of d.ultimos_7_dias) html += renderAnivCard(p, "passado");
     html += `</div>`;
-
-
   }
 
-
-
-
-
   div.innerHTML = html;
-
-
 }
 
 
@@ -15345,65 +15350,34 @@ function renderizarAniversariantes() {
 
 
 function renderAnivCard(p, tipo) {
-
-
-  const iniciais = p.nome.split(" ").slice(0, 2).map(s => s[0]).join("").toUpperCase();
-
-
+  const iniciais = (p.nome || "?").split(" ").slice(0, 2).map(s => s[0]).join("").toUpperCase();
   const dn = new Date(p.data_nascimento + "T00:00:00");
-
-
   const dataFmt = dn.toLocaleDateString("pt-BR", { day: "2-digit", month: "long" });
 
-
-
-
-
   let diasLabel = "";
-
-
   if (p.dias_ate === 0) diasLabel = "HOJE 🎉";
-
-
   else if (p.dias_ate > 0) diasLabel = `Em ${p.dias_ate} dia${p.dias_ate !== 1 ? "s" : ""}`;
-
-
   else diasLabel = `Há ${Math.abs(p.dias_ate)} dia${Math.abs(p.dias_ate) !== 1 ? "s" : ""}`;
 
+  const classeAvatar = tipo === "hoje" ? "aniv-avatar-iniciais hoje" : "aniv-avatar-iniciais";
 
-
-
+  const telefone = p.telefone ? p.telefone.replace(/\D/g, "") : "";
+  const linkWhats = telefone ? `https://wa.me/55${telefone}?text=Parab%C3%A9ns%20${encodeURIComponent(p.nome.split(" ")[0])}!%20Deus%20te%20aben%C3%A7oe%20muito!` : "";
+  const botaoParabens = tipo === "hoje" && linkWhats
+    ? `<a href="${linkWhats}" target="_blank" style="display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; padding: 6px 12px; background: rgba(16,185,129,0.15); color: var(--success); border-radius: 8px; font-size: 11px; font-weight: 600; text-decoration: none;">💬 Enviar parabéns</a>`
+    : "";
 
   return `
-
-
-    <div class="aniv-card ${tipo === 'hoje' ? 'hoje' : ''}" onclick="abrirPerfilPessoa('${p.id}')" style="cursor:pointer;">
-
-
-      <div class="aniv-avatar">${iniciais}</div>
-
-
+    <div class="aniv-card ${tipo === "hoje" ? "hoje" : ""}" onclick="abrirPerfilPessoa('${p.id}')" style="cursor:pointer;">
+      <div class="${classeAvatar}">${iniciais}</div>
       <div class="aniv-info">
-
-
         <div class="aniv-nome">${p.nome}</div>
-
-
         <div class="aniv-data">${dataFmt} · ${p.idade} anos</div>
-
-
+        ${botaoParabens}
       </div>
-
-
       <div class="aniv-dias ${tipo}">${diasLabel}</div>
-
-
     </div>
-
-
   `;
-
-
 }
 
 

@@ -364,3 +364,83 @@ uma IA. Atualmente no módulo Estudo (Bloco 3 fechado), pronto para o Bloco 4
 
 *Última atualização: 13 de outubro de 2026*
 *Máquina atual: PC (C:\Users\PC\Documents\CHURCH_PLATFORM)*
+
+# CONTEXTO DO PROJETO — CHURCH PLATFORM
+# ATUALIZADO: 14/10/2026
+
+## 🎯 O QUE É O PROJETO
+Church Platform — Plataforma SaaS pastoral multi-igreja.
+Responder "Quem precisa de atenção hoje?" com sigilo pastoral e multi-igreja.
+
+## 🌍 ESTADO ATUAL — NO AR!
+- **URL produção:** https://church-platform-production.up.railway.app
+- **Login:** pastor@igreja.com / senha123
+- **Status:** ✅ ACTIVE (deploy funcionando)
+- **Código:** github.com/willianrodrigo101/church-platform
+- **Railway:** railway.com/project/elegant-flow
+
+## ✅ CONQUISTADO HOJE (14/10/2026)
+1. ✅ Mobile responsivo com MENU HAMBURGER (☰) no header
+2. ✅ Drawer lateral com as 9 abas
+3. ✅ KPIs em 2 colunas no celular
+4. ✅ Fontes e cards compactos
+5. ✅ API dinâmica (window.location.origin + "/api/v1")
+6. ✅ Deploy automatizado via GitHub → Railway
+7. ✅ Sync entre frontend/web/index.html e backend/app/static/index.html
+
+## 📊 MÓDULOS (11 funcionando)
+1. 🔐 Autenticação (14 endpoints)
+2. 🏠 Dashboard Premium (1 + 3 gráficos)
+3. 🔔 Notificações (5 endpoints)
+4. 🏛️ Igrejas (7 endpoints)
+5. 👥 Pessoas + Aniversariantes (9 endpoints)
+6. 🕊️ Cuidado Pastoral (8 endpoints)
+7. 🙏 Oração (8 endpoints)
+8. 📅 Eventos (12 endpoints)
+9. 🎯 Jornada (15 endpoints)
+10. 📎 Anexos (5 endpoints)
+11. 📚 Estudo Bloco 1, 2, 3 (54 endpoints)
+   - Bloco 4 NÃO COMEÇADO
+
+## 💻 AMBIENTE TÉCNICO
+- **Máquina:** PC (C:\Users\PC\Documents\CHURCH_PLATFORM)
+- **Backend:** Python 3.12 + FastAPI + SQLAlchemy async
+- **Banco local:** PostgreSQL no Docker (porta 5433)
+- **Banco produção:** PostgreSQL gerenciado no Railway
+- **Frontend:** HTML/CSS/JS único em frontend/web/index.html (~360 KB)
+- **Docker:** docker compose up (backend + db)
+- **API:** window.location.origin + "/api/v1" (dinâmica)
+- **venv:** .venv na pasta backend
+
+## 🔑 CREDENCIAIS
+- **PostgreSQL local:** postgres / postgres (porta 5433)
+- **PostgreSQL produção:** Railway gerenciado
+- **Admin:** pastor@igreja.com / senha123
+- **Docker porta:** 8000 (localhost)
+
+## 🚀 COMO SUBIR LOCALMENTE
+**Backend (janela 1):**
+```powershell
+cd C:\Users\PC\Documents\CHURCH_PLATFORM
+docker compose up -d
+ MÉTODO DE TRABALHO (OBRIGATÓRIO)
+Guiar pelo PowerShell — comandos prontos para copiar e colar
+
+Código COMPLETO — nunca "mude a linha X"
+
+Blocos pequenos — um passo por vez
+
+Sempre com "Esperado:" em cada passo
+
+Diagnóstico pronto — se der erro, ler e mandar correção
+
+Próximos passos claros — "📋 Me manda:" no final
+
+Nunca desistir — se travar, volta, ajusta, segue
+
+Comemorar conquistas — registrar progresso
+
+Português brasileiro coloquial
+
+Scripts Python blindados — ler UTF-8 strict, verificar emojis antes de salvar, backup automático, restaurar se der erro
+
