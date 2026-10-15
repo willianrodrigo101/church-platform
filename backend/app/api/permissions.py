@@ -8,7 +8,7 @@ Todos os modulos devem importar daqui.
 Regras (matriz de visibilidade):
     🔴 admin   -> ve tudo (todas as igrejas)
     🟣 pastor  -> ve a propria igreja
-    🔵 lider   -> ve o proprio ministerio (aplicado quando ministerios existirem)
+    🔵 lider   -> ve o proprio ministerio (quando houver)
     🟢 membro  -> ve apenas os proprios dados
 
 IMPORTANTE:
