@@ -11348,7 +11348,7 @@ async function uploadFotoPessoa(inputEl) {
   // O backend vai salvar e devolver o ID do anexo
   const formData = new FormData();
   formData.append("arquivo", file);
-  formData.append("entidade_tipo", "pessoa_foto");
+  formData.append("entidade_tipo", "pessoa");
   // id temporario, o backend nao precisa validar pra esse tipo
   formData.append("entidade_id", "00000000-0000-0000-0000-000000000000");
 
