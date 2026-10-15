@@ -3,6 +3,10 @@ from uuid import UUID
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.permissions import (
+    filtrar_pessoas_por_role,
+    filtrar_por_igreja,
+)
 from app.modules.pessoas.models import Pessoa
 
 
@@ -30,11 +34,19 @@ class PessoaRepository:
         igreja_id: UUID | None = None,
         apenas_ativos: bool = False,
         apenas_membros: bool | None = None,
+        usuario=None,
     ) -> list[Pessoa]:
         stmt = select(Pessoa).order_by(Pessoa.nome.asc())
 
+        # Filtro explicito por igreja (query string) — mantido
         if igreja_id:
             stmt = stmt.where(Pessoa.igreja_id == igreja_id)
+
+        # Filtro automatico por igreja + role (permissions.py)
+        if usuario is not None:
+            stmt = filtrar_por_igreja(stmt, Pessoa, usuario)
+            stmt = filtrar_pessoas_por_role(stmt, Pessoa, usuario)
+
         if apenas_ativos:
             stmt = stmt.where(Pessoa.ativo.is_(True))
         if apenas_membros is True:
@@ -64,7 +76,6 @@ class PessoaRepository:
         await self.db.delete(pessoa)
         await self.db.flush()
 
-
     async def aniversariantes(
         self,
         igreja_id: UUID | None = None,
@@ -89,10 +100,6 @@ class PessoaRepository:
         mes = extract("month", Pessoa.data_nascimento)
         dia = extract("day", Pessoa.data_nascimento)
 
-        # Monta filtro: pessoa cujo (mes, dia) esteja no intervalo
-        # Como pode cruzar virada de mes/ano, vamos pegar todos os que tem data_nascimento
-        # e filtrar em Python (mais simples e confiavel)
-
         stmt = select(Pessoa).where(
             Pessoa.ativo.is_(True),
             Pessoa.data_nascimento.is_not(None),
@@ -110,10 +117,8 @@ class PessoaRepository:
             try:
                 aniv_este_ano = dn.replace(year=hoje.year)
             except ValueError:
-                # 29 de fevereiro em ano nao bissexto -> 28 de fevereiro
                 aniv_este_ano = dn.replace(year=hoje.year, day=28)
 
-            # Se ja passou, considera o ano que vem
             if aniv_este_ano < hoje:
                 try:
                     aniv_prox = dn.replace(year=hoje.year + 1)
@@ -122,13 +127,11 @@ class PessoaRepository:
             else:
                 aniv_prox = aniv_este_ano
 
-            # Tambem considera o do ano passado, para "ultimos 7 dias"
             try:
                 aniv_ant = dn.replace(year=hoje.year - 1)
             except ValueError:
                 aniv_ant = dn.replace(year=hoje.year - 1, day=28)
 
-            # Pega o mais relevante (mais proximo de hoje)
             candidatos = [aniv_ant, aniv_este_ano, aniv_prox]
             melhor = min(candidatos, key=lambda d: abs((d - hoje).days))
             dias_ate = (melhor - hoje).days
@@ -147,6 +150,5 @@ class PessoaRepository:
                     "igreja_nome": p.igreja.nome if p.igreja else None,
                 })
 
-        # Ordena: hoje primeiro, depois proximos, depois passados
         resultado.sort(key=lambda x: (abs(x["dias_ate"]), x["dias_ate"] < 0))
         return resultado

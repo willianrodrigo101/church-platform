@@ -30,7 +30,9 @@ async def listar_pessoas(
     apenas_ativos: bool = False, apenas_membros: bool | None = None,
     db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user),
 ):
-    return await PessoaService(db).listar(skip, limit, igreja_id, apenas_ativos, apenas_membros)
+    return await PessoaService(db).listar(
+        skip, limit, igreja_id, apenas_ativos, apenas_membros, usuario=usuario
+    )
 
 
 # ATENCAO: rotas especificas (como /aniversariantes/) DEVEM vir antes de /{pessoa_id}
@@ -80,7 +82,7 @@ async def perfil_pessoa(
 
 @router.get("/{pessoa_id}", response_model=PessoaResponse)
 async def buscar_pessoa(pessoa_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
-    return await PessoaService(db).buscar(pessoa_id)
+    return await PessoaService(db).buscar(pessoa_id, usuario=usuario)
 
 
 @router.put("/{pessoa_id}", response_model=PessoaResponse)
@@ -88,7 +90,7 @@ async def atualizar_pessoa(
     pessoa_id: UUID, dados: PessoaUpdate,
     db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user),
 ):
-    return await PessoaService(db).atualizar(pessoa_id, dados.model_dump(exclude_unset=True))
+    return await PessoaService(db).atualizar(pessoa_id, dados.model_dump(exclude_unset=True), usuario=usuario)
 
 
 @router.patch("/{pessoa_id}/desativar", response_model=PessoaResponse)
