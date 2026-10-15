@@ -444,3 +444,96 @@ Português brasileiro coloquial
 
 Scripts Python blindados — ler UTF-8 strict, verificar emojis antes de salvar, backup automático, restaurar se der erro
 
+# CONTEXTO DO PROJETO — CHURCH PLATFORM
+> Última atualização: 15/10/2026
+> Máquina: PC (C:\Users\PC\Documents\CHURCH_PLATFORM)
+
+## 🎯 O QUE É
+
+**Church Platform** — Plataforma SaaS pastoral multi-igreja.
+Pergunta central: **"Quem precisa de atenção hoje?"**
+
+**Visão:** Pastor abre o sistema e em 30 segundos sabe quem precisa
+de cuidado — com histórico completo, sigilo pastoral e multi-igreja.
+
+**Diferencial:** Não é CRUD de igreja. É plataforma de **cuidado pastoral**.
+
+**Missão:** Nenhuma pessoa da igreja deve cair no esquecimento.
+
+## 🌍 ESTADO ATUAL — NO AR
+
+- **URL:** https://church-platform-production.up.railway.app
+- **Login:** pastor@igreja.com / senha123
+- **Código:** github.com/willianrodrigo101/church-platform
+- **Railway:** railway.com/project/elegant-flow
+- **Status:** ✅ ACTIVE (deploy funcionando)
+
+## 📊 MÓDULOS IMPLEMENTADOS (11)
+
+| # | Módulo | Status | Onde está |
+|---|---|---|---|
+| 1 | 🔐 Autenticação | ✅ | app/modules/usuarios |
+| 2 | 🏠 Dashboard | ✅ | app/modules/dashboard |
+| 3 | 🔔 Notificações | ✅ | app/modules/notificacoes |
+| 4 | 🏛️ Igrejas | ✅ | app/modules/igreja |
+| 5 | 👥 Pessoas + Aniversariantes | ✅ | app/modules/pessoas |
+| 6 | 🕊️ Cuidado Pastoral | ✅ | app/modules/cuidado |
+| 7 | 🙏 Oração | ✅ | app/modules/oracao |
+| 8 | 📅 Eventos | ✅ | app/modules/eventos |
+| 9 | 🎯 Jornada | ✅ | app/modules/jornada |
+| 10 | 📎 Anexos | ✅ | app/modules/anexos |
+| 11 | 📚 Estudo (Blocos 1, 2, 3) | ✅ | app/modules/estudo |
+
+**Módulos com pasta vazia (planejados, não começados):**
+assistencia, comunicacao, comunidade, conteudo, discipulado,
+familia, financeiro, inteligencia, ministerios, missoes,
+relatorios, talentos
+
+## 📈 NÚMEROS DO PROJETO
+
+- **~113 endpoints REST**
+- **28 tabelas no banco**
+- **15 migrations aplicadas**
+- **10 abas + 5 sub-abas no frontend**
+- **~379 KB de frontend (index.html único)**
+
+## 🏆 O QUE JÁ CONQUISTAMOS
+
+### Histórico
+- ✅ 11 módulos completos
+- ✅ Multi-tenant (multi-igreja)
+- ✅ 4 roles: admin, pastor, lider, membro
+- ✅ Sigilo pastoral (flag `sigiloso` em acomp/oracao)
+- ✅ JWT authentication
+- ✅ Frontend único (index.html)
+
+### Deploy
+- ✅ Docker + docker-compose
+- ✅ Deploy no Railway (produção)
+- ✅ PostgreSQL gerenciado
+- ✅ HTTPS com certificado grátis
+- ✅ Deploy automático via GitHub
+
+### Design (sessões recentes)
+- ✅ Mobile responsivo com menu hamburger (☰)
+- ✅ Drawer lateral com 9 abas
+- ✅ KPIs em 2 colunas no mobile
+- ✅ Dashboard redesenhado (versículo aleatório, aniversariantes no topo, atenção pastoral)
+- ✅ Foto de perfil nas pessoas (upload + exibição no dashboard)
+
+## 🔧 STACK TÉCNICA
+
+- **Backend:** Python 3.12 + FastAPI + SQLAlchemy async
+- **Banco local:** PostgreSQL 16 no Docker (porta 5433)
+- **Banco produção:** PostgreSQL gerenciado Railway
+- **Frontend:** HTML/CSS/JS único em frontend/web/index.html
+- **Auth:** JWT
+- **Migrations:** Alembic (15 aplicadas)
+- **Docker:** backend + db
+
+## 🚀 COMO SUBIR O SISTEMA
+
+### Backend (janela 1)
+```powershell
+cd C:\Users\PC\Documents\CHURCH_PLATFORM
+docker compose up -d
