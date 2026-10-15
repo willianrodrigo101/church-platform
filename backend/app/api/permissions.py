@@ -6,10 +6,10 @@ Este arquivo e a UNICA fonte de verdade sobre quem pode ver o que.
 Todos os modulos devem importar daqui.
 
 Regras (matriz de visibilidade):
-    🔴 admin   -> ve tudo (todas as igrejas)
-    🟣 pastor  -> ve a propria igreja
-    🔵 lider   -> ve o proprio ministerio (quando houver)
-    🟢 membro  -> ve apenas os proprios dados
+    admin   -> ve tudo (todas as igrejas)
+    pastor  -> ve a propria igreja
+    lider   -> ve o proprio ministerio (quando houver)
+    membro  -> ve apenas os proprios dados
 
 IMPORTANTE:
     - Este arquivo NAO acessa o banco. Ele apenas monta filtros SQLAlchemy.
@@ -71,7 +71,7 @@ def pode_gerenciar_usuarios(user: Usuario) -> bool:
 
 
 def pode_gerenciar_igrejas(user: Usuario) -> bool:
-    """Somente admin cria/edita igrejas."""
+    """Somente admin cria e edita igrejas."""
     return is_admin(user)
 
 
@@ -81,7 +81,7 @@ def respeita_sigilo(user: Usuario) -> bool:
     (usuario nao ve conteudo sigiloso que nao seja dele).
 
     Admin: NAO respeita sigilo (ve tudo, inclusive sigiloso).
-    Pastor/Lider/Membro: respeitam sigilo.
+    Pastor, Lider e Membro: respeitam sigilo.
     """
     return not is_admin(user)
 
@@ -115,7 +115,7 @@ def filtrar_pessoas_por_role(query: Select, model: Any, user: Usuario) -> Select
     """
     Aplica filtro de visibilidade de pessoas.
 
-    - admin/pastor: veem todas as pessoas da igreja
+    - admin e pastor: veem todas as pessoas da igreja
     - lider: por enquanto veem todas (ministerio vem na Etapa 4)
     - membro: ve APENAS a si proprio
 
