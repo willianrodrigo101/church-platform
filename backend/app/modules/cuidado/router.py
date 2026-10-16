@@ -5,7 +5,9 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.dependencies import get_current_user
+from app.api.permissions import pode_escrever_em_cuidado
 from app.core.database.connection import get_db
+from app.core.exceptions.handlers import PermissionDeniedError
 from app.modules.cuidado.schemas import (
     AcompanhamentoCreate,
     AcompanhamentoResponse,
@@ -17,6 +19,11 @@ from app.modules.usuarios.models import Usuario
 
 
 router = APIRouter(prefix="/acompanhamentos", tags=["Cuidado Pastoral"])
+
+
+def _exigir_escrita(usuario: Usuario):
+    if not pode_escrever_em_cuidado(usuario):
+        raise PermissionDeniedError("Seu perfil nao permite criar ou alterar acompanhamentos.")
 
 
 @router.get("/dashboard/alertas", response_model=DashboardAlertas)
@@ -35,6 +42,7 @@ async def criar(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     service = AcompanhamentoService(db)
     return await service.criar(dados.model_dump(), usuario)
 
@@ -75,6 +83,7 @@ async def atualizar(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     service = AcompanhamentoService(db)
     return await service.atualizar(obj_id, dados.model_dump(exclude_unset=True), usuario)
 
@@ -85,6 +94,7 @@ async def concluir(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     service = AcompanhamentoService(db)
     return await service.concluir(obj_id, usuario)
 
@@ -95,6 +105,7 @@ async def reabrir(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     service = AcompanhamentoService(db)
     return await service.reabrir(obj_id, usuario)
 
@@ -105,5 +116,6 @@ async def deletar(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     service = AcompanhamentoService(db)
     await service.deletar(obj_id, usuario)
