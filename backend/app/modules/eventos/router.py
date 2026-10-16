@@ -5,7 +5,9 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.dependencies import get_current_user
+from app.api.permissions import pode_escrever_em_eventos
 from app.core.database.connection import get_db
+from app.core.exceptions.handlers import PermissionDeniedError
 from app.modules.eventos.schemas import (
     DashboardEventos,
     EventoCreate,
@@ -20,6 +22,11 @@ from app.modules.usuarios.models import Usuario
 
 
 router = APIRouter(prefix="/eventos", tags=["Eventos"])
+
+
+def _exigir_escrita(usuario: Usuario):
+    if not pode_escrever_em_eventos(usuario):
+        raise PermissionDeniedError("Seu perfil nao permite criar ou alterar eventos.")
 
 
 # ============ EVENTOS ============
@@ -39,6 +46,7 @@ async def criar(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await EventoService(db).criar(dados.model_dump(), usuario)
 
 
@@ -74,6 +82,7 @@ async def atualizar(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await EventoService(db).atualizar(evento_id, dados.model_dump(exclude_unset=True), usuario)
 
 
@@ -83,6 +92,7 @@ async def desativar(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await EventoService(db).desativar(evento_id, usuario)
 
 
@@ -92,6 +102,7 @@ async def reativar(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await EventoService(db).reativar(evento_id, usuario)
 
 
@@ -101,6 +112,7 @@ async def deletar(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     await EventoService(db).deletar(evento_id, usuario)
 
 
@@ -113,6 +125,7 @@ async def criar_inscricao(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    # TODO MUNDO se inscreve (inclusive membro)
     return await InscricaoService(db).criar(evento_id, dados.pessoa_id, dados.observacao, usuario)
 
 
@@ -132,6 +145,7 @@ async def checkin(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await InscricaoService(db).checkin(inscricao_id, dados.status, dados.observacao, usuario)
 
 
@@ -141,4 +155,5 @@ async def deletar_inscricao(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     await InscricaoService(db).deletar(inscricao_id, usuario)
