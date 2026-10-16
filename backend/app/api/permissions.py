@@ -172,6 +172,49 @@ def filtrar_por_sigilo(
     )
 
 
+def filtrar_acompanhamentos_por_role(query: Select, model: Any, user: Usuario) -> Select:
+    """
+    Aplica filtro de visibilidade de acompanhamentos.
+
+    - admin, pastor, lider: veem todos (sigilo e aplicado depois)
+    - membro: NAO ve nenhum acompanhamento (retorna vazio)
+
+    Requer que o model Acompanhamento tenha id.
+    """
+    if is_membro(user):
+        # Membro nao tem atribuicao de ver acompanhamentos
+        return query.where(model.id == None)  # noqa: E711
+
+    return query
+
+
+def filtrar_oracoes_por_role(query: Select, model: Any, user: Usuario) -> Select:
+    """
+    Aplica filtro de visibilidade de oracoes.
+
+    - admin, pastor, lider: veem todas (sigilo e aplicado depois)
+    - membro: ve apenas as PUBLICAS (publica=True) OU as que ELE criou
+
+    Requer que o model Oracao tenha id, publica e pessoa_id.
+    """
+    if is_membro(user):
+        pessoa_id = getattr(user, "pessoa_id", None)
+
+        condicoes = []
+        if hasattr(model, "publica"):
+            condicoes.append(model.publica.is_(True))
+        if pessoa_id is not None and hasattr(model, "pessoa_id"):
+            condicoes.append(model.pessoa_id == pessoa_id)
+
+        if not condicoes:
+            # Membro sem pessoa e model sem publica: nao ve nada
+            return query.where(model.id == None)  # noqa: E711
+
+        return query.where(or_(*condicoes))
+
+    return query
+
+
 def filtrar_por_igreja_e_sigilo(
     query: Select,
     model: Any,
@@ -203,5 +246,7 @@ __all__ = [
     "filtrar_por_igreja",
     "filtrar_pessoas_por_role",
     "filtrar_por_sigilo",
+    "filtrar_acompanhamentos_por_role",
+    "filtrar_oracoes_por_role",
     "filtrar_por_igreja_e_sigilo",
 ]
