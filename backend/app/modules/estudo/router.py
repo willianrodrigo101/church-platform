@@ -1,10 +1,12 @@
-﻿from uuid import UUID
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.dependencies import get_current_user
+from app.api.permissions import pode_gerenciar_estudo, pode_escrever_em_cuidado
 from app.core.database.connection import get_db
+from app.core.exceptions.handlers import PermissionDeniedError
 from app.modules.estudo.schemas import (
     AnotacaoCreate,
     AnotacaoResponse,
@@ -68,6 +70,18 @@ from app.modules.usuarios.models import Usuario
 router = APIRouter(prefix="/estudo", tags=["Estudo"])
 
 
+def _exigir_gerenciar(usuario: Usuario):
+    """Bloqueia quem nao pode gerenciar conteudo do estudo (admin + pastor)."""
+    if not pode_gerenciar_estudo(usuario):
+        raise PermissionDeniedError("Seu perfil nao permite gerenciar conteudo do estudo.")
+
+
+def _exigir_operacional(usuario: Usuario):
+    """Bloqueia quem nao pode operar turmas (admin + pastor + lider)."""
+    if not pode_escrever_em_cuidado(usuario):
+        raise PermissionDeniedError("Seu perfil nao permite gerenciar turmas e matriculas.")
+
+
 # ============ DASHBOARD ============
 
 @router.get("/dashboard", response_model=DashboardEstudo)
@@ -83,6 +97,7 @@ async def dashboard(
 
 @router.post("/trilhas/", response_model=TrilhaResponse, status_code=status.HTTP_201_CREATED)
 async def criar_trilha(dados: TrilhaCreate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await TrilhaService(db).criar(dados.model_dump(), usuario)
 
 
@@ -105,21 +120,25 @@ async def buscar_trilha(trilha_id: UUID, db: AsyncSession = Depends(get_db), usu
 
 @router.put("/trilhas/{trilha_id}", response_model=TrilhaResponse)
 async def atualizar_trilha(trilha_id: UUID, dados: TrilhaUpdate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await TrilhaService(db).atualizar(trilha_id, dados.model_dump(exclude_unset=True), usuario)
 
 
 @router.patch("/trilhas/{trilha_id}/desativar", response_model=TrilhaResponse)
 async def desativar_trilha(trilha_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await TrilhaService(db).desativar(trilha_id, usuario)
 
 
 @router.patch("/trilhas/{trilha_id}/reativar", response_model=TrilhaResponse)
 async def reativar_trilha(trilha_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await TrilhaService(db).reativar(trilha_id, usuario)
 
 
 @router.delete("/trilhas/{trilha_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def deletar_trilha(trilha_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     await TrilhaService(db).deletar(trilha_id, usuario)
 
 
@@ -127,6 +146,7 @@ async def deletar_trilha(trilha_id: UUID, db: AsyncSession = Depends(get_db), us
 
 @router.post("/cursos/", response_model=CursoResponse, status_code=status.HTTP_201_CREATED)
 async def criar_curso(dados: CursoCreate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await CursoService(db).criar(dados.model_dump(), usuario)
 
 
@@ -151,21 +171,25 @@ async def buscar_curso(curso_id: UUID, db: AsyncSession = Depends(get_db), usuar
 
 @router.put("/cursos/{curso_id}", response_model=CursoResponse)
 async def atualizar_curso(curso_id: UUID, dados: CursoUpdate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await CursoService(db).atualizar(curso_id, dados.model_dump(exclude_unset=True), usuario)
 
 
 @router.patch("/cursos/{curso_id}/desativar", response_model=CursoResponse)
 async def desativar_curso(curso_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await CursoService(db).desativar(curso_id, usuario)
 
 
 @router.patch("/cursos/{curso_id}/reativar", response_model=CursoResponse)
 async def reativar_curso(curso_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await CursoService(db).reativar(curso_id, usuario)
 
 
 @router.delete("/cursos/{curso_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def deletar_curso(curso_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     await CursoService(db).deletar(curso_id, usuario)
 
 
@@ -173,6 +197,7 @@ async def deletar_curso(curso_id: UUID, db: AsyncSession = Depends(get_db), usua
 
 @router.post("/cursos/{curso_id}/modulos/", response_model=ModuloResponse, status_code=status.HTTP_201_CREATED)
 async def criar_modulo(curso_id: UUID, dados: ModuloCreate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await ModuloService(db).criar(curso_id, dados.model_dump(), usuario)
 
 
@@ -183,11 +208,13 @@ async def listar_modulos(curso_id: UUID, db: AsyncSession = Depends(get_db), usu
 
 @router.put("/modulos/{modulo_id}", response_model=ModuloResponse)
 async def atualizar_modulo(modulo_id: UUID, dados: ModuloUpdate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await ModuloService(db).atualizar(modulo_id, dados.model_dump(exclude_unset=True), usuario)
 
 
 @router.delete("/modulos/{modulo_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def deletar_modulo(modulo_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     await ModuloService(db).deletar(modulo_id, usuario)
 
 
@@ -195,6 +222,7 @@ async def deletar_modulo(modulo_id: UUID, db: AsyncSession = Depends(get_db), us
 
 @router.post("/modulos/{modulo_id}/conteudos/", response_model=ConteudoResponse, status_code=status.HTTP_201_CREATED)
 async def criar_conteudo(modulo_id: UUID, dados: ConteudoCreate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await ConteudoService(db).criar(modulo_id, dados.model_dump(), usuario)
 
 
@@ -205,6 +233,7 @@ async def listar_conteudos(modulo_id: UUID, db: AsyncSession = Depends(get_db), 
 
 @router.delete("/conteudos/{conteudo_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def deletar_conteudo(conteudo_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     await ConteudoService(db).deletar(conteudo_id, usuario)
 
 # ============ TURMAS ============
@@ -220,6 +249,7 @@ async def dashboard_turmas(
 
 @router.post("/turmas/", response_model=TurmaResponse, status_code=status.HTTP_201_CREATED)
 async def criar_turma(dados: TurmaCreate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await TurmaService(db).criar(dados.model_dump(), usuario)
 
 
@@ -243,21 +273,25 @@ async def buscar_turma(turma_id: UUID, db: AsyncSession = Depends(get_db), usuar
 
 @router.put("/turmas/{turma_id}", response_model=TurmaResponse)
 async def atualizar_turma(turma_id: UUID, dados: TurmaUpdate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await TurmaService(db).atualizar(turma_id, dados.model_dump(exclude_unset=True), usuario)
 
 
 @router.patch("/turmas/{turma_id}/iniciar", response_model=TurmaResponse)
 async def iniciar_turma(turma_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await TurmaService(db).iniciar(turma_id, usuario)
 
 
 @router.patch("/turmas/{turma_id}/concluir", response_model=TurmaResponse)
 async def concluir_turma(turma_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await TurmaService(db).concluir(turma_id, usuario)
 
 
 @router.delete("/turmas/{turma_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def deletar_turma(turma_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     await TurmaService(db).deletar(turma_id, usuario)
 
 
@@ -265,6 +299,7 @@ async def deletar_turma(turma_id: UUID, db: AsyncSession = Depends(get_db), usua
 
 @router.post("/turmas/{turma_id}/matriculas/", response_model=MatriculaResponse, status_code=status.HTTP_201_CREATED)
 async def criar_matricula(turma_id: UUID, dados: MatriculaCreate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_operacional(usuario)
     return await MatriculaService(db).criar(turma_id, dados.model_dump(), usuario)
 
 
@@ -291,21 +326,25 @@ async def marcar_modulo_concluido(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_operacional(usuario)
     return await MatriculaService(db).marcar_modulo(matricula_id, modulo_id, dados.concluido, dados.nota, usuario)
 
 
 @router.patch("/matriculas/{matricula_id}/aprovar", response_model=MatriculaResponse)
 async def aprovar_matricula(matricula_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_operacional(usuario)
     return await MatriculaService(db).aprovar(matricula_id, usuario)
 
 
 @router.patch("/matriculas/{matricula_id}/desistir", response_model=MatriculaResponse)
 async def desistir_matricula(matricula_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_operacional(usuario)
     return await MatriculaService(db).desistir(matricula_id, usuario)
 
 
 @router.delete("/matriculas/{matricula_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def deletar_matricula(matricula_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_operacional(usuario)
     await MatriculaService(db).deletar(matricula_id, usuario)
 
 
@@ -313,6 +352,7 @@ async def deletar_matricula(matricula_id: UUID, db: AsyncSession = Depends(get_d
 
 @router.post("/matriculas/{matricula_id}/presencas/", response_model=PresencaResponse, status_code=status.HTTP_201_CREATED)
 async def criar_presenca(matricula_id: UUID, dados: PresencaCreate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_operacional(usuario)
     return await PresencaService(db).criar(matricula_id, dados.model_dump(), usuario)
 
 
@@ -323,11 +363,13 @@ async def listar_presencas(matricula_id: UUID, db: AsyncSession = Depends(get_db
 
 @router.post("/turmas/{turma_id}/chamada")
 async def fazer_chamada(turma_id: UUID, dados: ChamadaRequest, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_operacional(usuario)
     return await PresencaService(db).chamada(turma_id, dados.data_aula, dados.modulo_id, dados.presencas, usuario)
 
 
 @router.delete("/presencas/{presenca_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def deletar_presenca(presenca_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_operacional(usuario)
     await PresencaService(db).deletar(presenca_id, usuario)
 
 # ============ CERTIFICADOS ============
@@ -339,6 +381,7 @@ async def emitir_certificado(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_operacional(usuario)
     carga = dados.carga_horaria if dados else None
     return await CertificadoService(db).emitir(matricula_id, usuario, carga_horaria=carga)
 
@@ -375,12 +418,14 @@ async def cancelar_certificado(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_operacional(usuario)
     await CertificadoService(db).cancelar(certificado_id, usuario)
 
 # ============ QUIZZES ============
 
 @router.post("/quizzes/", response_model=QuizResponse, status_code=status.HTTP_201_CREATED)
 async def criar_quiz(dados: QuizCreate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await QuizService(db).criar(dados.model_dump(), usuario)
 
 
@@ -407,6 +452,7 @@ async def responder_quiz(
 
 @router.delete("/quizzes/{quiz_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def deletar_quiz(quiz_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     await QuizService(db).deletar(quiz_id, usuario)
 
 
@@ -438,6 +484,7 @@ async def deletar_comentario(comentario_id: UUID, db: AsyncSession = Depends(get
 
 @router.post("/badges/", response_model=BadgeResponse, status_code=status.HTTP_201_CREATED)
 async def criar_badge(dados: BadgeCreate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_gerenciar(usuario)
     return await BadgeService(db).criar(dados.model_dump(), usuario)
 
 
@@ -453,6 +500,7 @@ async def conceder_badge(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_gerenciar(usuario)
     return await BadgeService(db).conceder(badge_id, pessoa_id, usuario)
 
 
@@ -515,6 +563,7 @@ async def criar_ferramenta(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_gerenciar(usuario)
     return await FerramentaService(db).criar(dados.model_dump(), usuario)
 
 
@@ -533,4 +582,5 @@ async def deletar_ferramenta(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_gerenciar(usuario)
     await FerramentaService(db).deletar(ferramenta_id, usuario)
