@@ -4,7 +4,9 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.dependencies import get_current_user
+from app.api.permissions import pode_escrever_em_pessoas
 from app.core.database.connection import get_db
+from app.core.exceptions.handlers import PermissionDeniedError
 from app.modules.pessoas.schemas import (
     Aniversariante,
     AniversariantesResumo,
@@ -19,8 +21,14 @@ from app.modules.usuarios.models import Usuario
 router = APIRouter(prefix="/pessoas", tags=["Pessoas"])
 
 
+def _exigir_escrita(usuario: Usuario):
+    if not pode_escrever_em_pessoas(usuario):
+        raise PermissionDeniedError("Seu perfil nao permite criar ou alterar pessoas.")
+
+
 @router.post("/", response_model=PessoaResponse, status_code=status.HTTP_201_CREATED)
 async def criar_pessoa(dados: PessoaCreate, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_escrita(usuario)
     return await PessoaService(db).criar(dados.model_dump())
 
 
@@ -90,19 +98,23 @@ async def atualizar_pessoa(
     pessoa_id: UUID, dados: PessoaUpdate,
     db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await PessoaService(db).atualizar(pessoa_id, dados.model_dump(exclude_unset=True), usuario=usuario)
 
 
 @router.patch("/{pessoa_id}/desativar", response_model=PessoaResponse)
 async def desativar_pessoa(pessoa_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_escrita(usuario)
     return await PessoaService(db).desativar(pessoa_id)
 
 
 @router.patch("/{pessoa_id}/reativar", response_model=PessoaResponse)
 async def reativar_pessoa(pessoa_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_escrita(usuario)
     return await PessoaService(db).reativar(pessoa_id)
 
 
 @router.delete("/{pessoa_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def deletar_pessoa(pessoa_id: UUID, db: AsyncSession = Depends(get_db), usuario: Usuario = Depends(get_current_user)):
+    _exigir_escrita(usuario)
     await PessoaService(db).deletar_com_protecao(pessoa_id)

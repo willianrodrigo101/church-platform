@@ -87,6 +87,80 @@ def respeita_sigilo(user: Usuario) -> bool:
 
 
 # ------------------------------------------------------------------
+# Permissoes de ESCRITA (criar / editar / deletar)
+# ------------------------------------------------------------------
+
+def pode_escrever_em_pessoas(user: Usuario) -> bool:
+    """
+    Quem pode criar/editar/deletar pessoas.
+
+    - admin, pastor, lider: SIM
+    - membro: NAO (so ve a si proprio, nao cria outros)
+    """
+    return pode_ver_igreja(user)
+
+
+def pode_escrever_em_eventos(user: Usuario) -> bool:
+    """
+    Quem pode criar/editar/deletar eventos.
+
+    - admin, pastor, lider: SIM
+    - membro: NAO
+    """
+    return pode_ver_igreja(user)
+
+
+def pode_escrever_em_cuidado(user: Usuario) -> bool:
+    """
+    Quem pode criar/editar/deletar acompanhamentos.
+
+    - admin, pastor, lider: SIM
+    - membro: NAO
+    """
+    return pode_ver_igreja(user)
+
+
+def pode_escrever_em_jornada(user: Usuario) -> bool:
+    """
+    Quem pode criar/editar/deletar trilhas, etapas, matriculas de trilha.
+
+    - admin, pastor: SIM
+    - lider: NAO (a definir na Etapa 4)
+    - membro: NAO
+    """
+    return pode_ver_tudo(user)
+
+
+def pode_gerenciar_estudo(user: Usuario) -> bool:
+    """
+    Quem pode gerenciar cursos, turmas, modulos, quizzes (parte administrativa).
+
+    - admin, pastor: SIM
+    - lider: NAO
+    - membro: NAO
+    """
+    return pode_ver_tudo(user)
+
+
+def pode_criar_oracao(user: Usuario) -> bool:
+    """
+    Quem pode criar pedido de oracao.
+
+    - TODO MUNDO, inclusive membro (e o unico lugar onde membro cria)
+    """
+    return True
+
+
+def pode_criar_matricula(user: Usuario) -> bool:
+    """
+    Quem pode se matricular em curso.
+
+    - TODO MUNDO, inclusive membro
+    """
+    return True
+
+
+# ------------------------------------------------------------------
 # Filtros reutilizaveis (SQLAlchemy)
 # ------------------------------------------------------------------
 
@@ -242,6 +316,14 @@ __all__ = [
     "pode_gerenciar_usuarios",
     "pode_gerenciar_igrejas",
     "respeita_sigilo",
+    # permissoes de escrita
+    "pode_escrever_em_pessoas",
+    "pode_escrever_em_eventos",
+    "pode_escrever_em_cuidado",
+    "pode_escrever_em_jornada",
+    "pode_gerenciar_estudo",
+    "pode_criar_oracao",
+    "pode_criar_matricula",
     # filtros
     "filtrar_por_igreja",
     "filtrar_pessoas_por_role",
