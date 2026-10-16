@@ -4,7 +4,9 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.dependencies import get_current_user
+from app.api.permissions import pode_escrever_em_jornada
 from app.core.database.connection import get_db
+from app.core.exceptions.handlers import PermissionDeniedError
 from app.modules.jornada.schemas import (
     DashboardJornada,
     MarcarEtapaRequest,
@@ -19,6 +21,11 @@ from app.modules.usuarios.models import Usuario
 
 
 router = APIRouter(prefix="/jornada", tags=["Jornada"])
+
+
+def _exigir_escrita(usuario: Usuario):
+    if not pode_escrever_em_jornada(usuario):
+        raise PermissionDeniedError("Seu perfil nao permite criar ou alterar jornada.")
 
 
 # ============ DASHBOARD ============
@@ -40,6 +47,7 @@ async def criar_trilha(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await TrilhaService(db).criar(dados.model_dump(), usuario)
 
 
@@ -71,6 +79,7 @@ async def atualizar_trilha(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await TrilhaService(db).atualizar(trilha_id, dados.model_dump(exclude_unset=True), usuario)
 
 
@@ -80,6 +89,7 @@ async def desativar_trilha(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await TrilhaService(db).desativar(trilha_id, usuario)
 
 
@@ -89,6 +99,7 @@ async def reativar_trilha(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await TrilhaService(db).reativar(trilha_id, usuario)
 
 
@@ -98,6 +109,7 @@ async def deletar_trilha(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     await TrilhaService(db).deletar(trilha_id, usuario)
 
 
@@ -109,6 +121,7 @@ async def criar_progresso(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await ProgressoService(db).criar(dados.model_dump(), usuario)
 
 
@@ -144,6 +157,7 @@ async def marcar_etapa(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await ProgressoService(db).marcar_etapa(
         progresso_id, etapa_id, dados.concluida, dados.observacao, usuario,
     )
@@ -155,6 +169,7 @@ async def concluir_progresso(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await ProgressoService(db).concluir(progresso_id, usuario)
 
 
@@ -164,6 +179,7 @@ async def cancelar_progresso(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     return await ProgressoService(db).cancelar(progresso_id, usuario)
 
 
@@ -173,4 +189,5 @@ async def deletar_progresso(
     db: AsyncSession = Depends(get_db),
     usuario: Usuario = Depends(get_current_user),
 ):
+    _exigir_escrita(usuario)
     await ProgressoService(db).deletar(progresso_id, usuario)
