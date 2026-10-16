@@ -4,6 +4,7 @@ from uuid import UUID
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.permissions import filtrar_oracoes_por_role
 from app.modules.oracao.models import PedidoOracao
 
 
@@ -27,6 +28,7 @@ class PedidoRepository:
         pessoa_id=None, igreja_id=None, categoria=None, status=None,
         apenas_ativos=False, apenas_sigilosos=None,
         autor_id=None, incluir_sigilosos=False,
+        usuario=None,
     ) -> list[PedidoOracao]:
         stmt = select(PedidoOracao).order_by(PedidoOracao.data_pedido.desc())
         if pessoa_id: stmt = stmt.where(PedidoOracao.pessoa_id == pessoa_id)
@@ -36,6 +38,10 @@ class PedidoRepository:
         if apenas_ativos: stmt = stmt.where(PedidoOracao.ativo.is_(True))
         if apenas_sigilosos is True: stmt = stmt.where(PedidoOracao.sigiloso.is_(True))
         elif apenas_sigilosos is False: stmt = stmt.where(PedidoOracao.sigiloso.is_(False))
+
+        # Filtro de role (membro so ve publicas + as proprias)
+        if usuario is not None:
+            stmt = filtrar_oracoes_por_role(stmt, PedidoOracao, usuario)
 
         if not incluir_sigilosos:
             stmt = stmt.where(
