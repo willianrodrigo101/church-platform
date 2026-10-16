@@ -18,6 +18,9 @@ class AcompanhamentoService:
         self.db = db
 
     def _pode_ver(self, obj, usuario: Usuario) -> bool:
+        # Membro nunca ve acompanhamentos
+        if usuario.role == "membro":
+            return False
         if not obj.sigiloso:
             return True
         if usuario.role == "admin":
@@ -25,6 +28,9 @@ class AcompanhamentoService:
         return str(obj.responsavel_id) == str(usuario.id)
 
     def _pode_editar(self, obj, usuario: Usuario) -> bool:
+        # Membro nunca edita acompanhamentos
+        if usuario.role == "membro":
+            return False
         if usuario.role == "admin":
             return True
         return str(obj.responsavel_id) == str(usuario.id)
@@ -58,6 +64,7 @@ class AcompanhamentoService:
             skip, limit, pessoa_id, igreja_id, tipo, status,
             apenas_ativos, apenas_vencidos,
             autor_id=usuario.id, incluir_sigilosos=incluir_sigilosos,
+            usuario=usuario,
         )
 
     async def atualizar(self, obj_id: UUID, dados: dict, usuario: Usuario):

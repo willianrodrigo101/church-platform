@@ -4,6 +4,7 @@ from uuid import UUID
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.permissions import filtrar_acompanhamentos_por_role
 from app.modules.cuidado.models import Acompanhamento
 from app.modules.pessoas.models import Pessoa
 
@@ -30,6 +31,7 @@ class AcompanhamentoRepository:
         apenas_ativos: bool = False, apenas_vencidos: bool = False,
         apenas_sigilosos: bool | None = None,
         autor_id: UUID | None = None, incluir_sigilosos: bool = False,
+        usuario=None,
     ) -> list[Acompanhamento]:
         stmt = select(Acompanhamento).order_by(Acompanhamento.data.desc())
 
@@ -44,6 +46,10 @@ class AcompanhamentoRepository:
                 Acompanhamento.data_retorno < hoje,
                 Acompanhamento.status.in_(["pendente", "em_andamento"]),
             )
+
+        # Filtro de role (membro nao ve nada)
+        if usuario is not None:
+            stmt = filtrar_acompanhamentos_por_role(stmt, Acompanhamento, usuario)
 
         # Regra de sigilo: se nao pode ver sigilosos, so ve os proprios
         if not incluir_sigilosos:
