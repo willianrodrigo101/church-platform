@@ -690,3 +690,17 @@ docker compose restart backend
 git add .
 git commit -m "feat: xxx"
 git push
+
+---
+
+## 🚧 APRENDIZADOS DA SESSÃO 16/10/2026
+
+### 1. BOM UTF-8 em arquivos Python
+- Windows às vezes salva `.py` com BOM (`\ufeff`) invisível no começo
+- Isso quebra `ast.parse`, `Select-String`, e scripts que procuram strings
+- **Solução:** SEMPRE ler arquivos como bytes e remover BOM antes:
+  ```python
+  raw = Path(x).read_bytes()
+  bom = b"\xef\xbb\xbf"
+  while raw.startswith(bom):
+      raw = raw[len(bom):]
