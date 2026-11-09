@@ -4756,6 +4756,69 @@
     object-fit: cover;
   }
 
+
+  /* ============ CARGO ECLESIASTICO (FASE 1) ============ */
+  .cargo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+  }
+  .cargo-badge.pastor,
+  .cargo-badge.pastora {
+    background: rgba(236, 72, 153, 0.15);
+    color: #ec4899;
+    border-color: rgba(236, 72, 153, 0.3);
+  }
+  .cargo-badge.lider,
+  .cargo-badge.lider-de-louvor,
+  .cargo-badge.lider-de-jovens,
+  .cargo-badge.lider-de-adolescentes,
+  .cargo-badge.lider-de-criancas,
+  .cargo-badge.lider-de-celula,
+  .cargo-badge.lider-de-ministerio {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+  .cargo-badge.diacono,
+  .cargo-badge.diaconisa,
+  .cargo-badge.presbitero,
+  .cargo-badge.anciao,
+  .cargo-badge.evangelista {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border-color: rgba(245, 158, 11, 0.3);
+  }
+  .cargo-badge.secretario,
+  .cargo-badge.secretaria,
+  .cargo-badge.tesoureiro,
+  .cargo-badge.tesoureira {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+
+  .perfil-info-cargo {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .perfil-info-cargo .cargo-data {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
 </style>
 
 
@@ -6161,6 +6224,42 @@
             </button>
             <input type="hidden" id="form-pessoa-foto-url" name="foto_url">
           </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Cargo Eclesiástico</label>
+          <select class="form-select" name="cargo_eclesiastico" id="select-cargo-pessoa">
+            <option value="">— Selecione —</option>
+            <option value="Membro">Membro</option>
+            <option value="Visitante">Visitante</option>
+            <option value="Congregado">Congregado</option>
+            <option value="Cooperador">Cooperador(a)</option>
+            <option value="Obreiro">Obreiro(a)</option>
+            <option value="Auxiliar">Auxiliar</option>
+            <option value="Diácono">Diácono / Diaconisa</option>
+            <option value="Presbítero">Presbítero / Ancião</option>
+            <option value="Evangelista">Evangelista</option>
+            <option value="Pastor">Pastor / Pastora</option>
+            <option value="Missionário">Missionário(a)</option>
+            <option value="Secretário">Secretário(a)</option>
+            <option value="Tesoureiro">Tesoureiro(a)</option>
+            <option value="Líder de Louvor">Líder de Louvor</option>
+            <option value="Líder de Jovens">Líder de Jovens</option>
+            <option value="Líder de Adolescentes">Líder de Adolescentes</option>
+            <option value="Líder de Crianças">Líder de Crianças</option>
+            <option value="Líder de Célula">Líder de Célula</option>
+            <option value="Líder de Ministério">Líder de Ministério</option>
+            <option value="Professor de EBD">Professor(a) de EBD</option>
+            <option value="Coordenador">Coordenador(a)</option>
+            <option value="Supervisor">Supervisor(a)</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data de Filiação</label>
+          <input type="date" class="form-input" name="data_filiacao">
         </div>
       </div>
 
@@ -11064,7 +11163,7 @@ function abrirFormPessoa(pessoa = null) {
     document.getElementById("form-pessoa-id").value = pessoa.id;
 
 
-    ["nome","cpf","email","telefone","data_nascimento","endereco","cidade","estado","observacoes"].forEach(k => {
+    ["nome","cpf","email","telefone","data_nascimento","endereco","cidade","estado","observacoes","cargo_eclesiastico","data_filiacao"].forEach(k => {
 
 
       const el = document.querySelector(`#form-pessoa [name="${k}"]`);
@@ -11348,7 +11447,7 @@ async function uploadFotoPessoa(inputEl) {
   // O backend vai salvar e devolver o ID do anexo
   const formData = new FormData();
   formData.append("arquivo", file);
-  formData.append("entidade_tipo", "pessoa_foto");
+  formData.append("entidade_tipo", "pessoa");
   // id temporario, o backend nao precisa validar pra esse tipo
   formData.append("entidade_id", "00000000-0000-0000-0000-000000000000");
 

@@ -17,6 +17,8 @@ class PessoaBase(BaseModel):
     membro: bool = True
     observacoes: str | None = None
     foto_url: str | None = Field(None, max_length=500)
+    cargo_eclesiastico: str | None = Field(None, max_length=50)
+    data_filiacao: date | None = None
 
 
 class PessoaCreate(PessoaBase):
@@ -36,6 +38,8 @@ class PessoaUpdate(BaseModel):
     membro: bool | None = None
     observacoes: str | None = None
     foto_url: str | None = Field(None, max_length=500)
+    cargo_eclesiastico: str | None = Field(None, max_length=50)
+    data_filiacao: date | None = None
 
 
 class IgrejaResumo(BaseModel):
@@ -80,6 +84,8 @@ class PessoaCompleta(BaseModel):
     membro: bool
     observacoes: str | None = None
     foto_url: str | None = None
+    cargo_eclesiastico: str | None = None
+    data_filiacao: date | None = None
     ativo: bool
     created_at: datetime
     updated_at: datetime
@@ -98,6 +104,7 @@ class Aniversariante(BaseModel):
     email: str | None = None
     igreja_nome: str | None = None
     foto_url: str | None = None
+    cargo_eclesiastico: str | None = None
 
 
 class AniversariantesResumo(BaseModel):

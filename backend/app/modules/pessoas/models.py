@@ -34,6 +34,9 @@ class Pessoa(Base, UUIDMixin, TimestampMixin):
     membro: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     observacoes: Mapped[str | None] = mapped_column(Text, nullable=True)
     foto_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+
+    cargo_eclesiastico: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    data_filiacao: Mapped[date | None] = mapped_column(Date, nullable=True)
     ativo: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False, index=True)
 
     igreja = relationship("Igreja", lazy="joined")
