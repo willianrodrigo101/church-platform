@@ -4819,6 +4819,21 @@
     color: var(--text-muted);
   }
 
+
+  /* ============ FASE 1.5: USUARIO PREMIUM ============ */
+  .usuario-bloco { margin-bottom: 24px; padding: 18px 16px 8px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 14px; position: relative; }
+  .usuario-bloco-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+  .usuario-bloco-header .icon { font-size: 18px; }
+  .usuario-bloco .form-group { margin-bottom: 14px; }
+  .usuario-foto-area { display: flex; align-items: center; gap: 16px; padding: 12px; background: var(--bg-card); border: 1px dashed var(--border); border-radius: 12px; margin-bottom: 14px; }
+  .usuario-foto-preview { width: 64px; height: 64px; border-radius: 50%; background: var(--bg); border: 2px solid var(--border); display: grid; place-items: center; font-size: 24px; color: var(--text-muted); overflow: hidden; flex-shrink: 0; }
+  .usuario-foto-preview img { width: 100%; height: 100%; object-fit: cover; }
+  .usuario-foto-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: var(--accent); color: white; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; }
+  .usuario-foto-btn:hover { background: var(--accent-hover); }
+  .usuario-foto-btn.remover { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+  .usuario-foto-input { display: none; }
+  @media (max-width: 640px) { .usuario-bloco { padding: 14px 12px 6px 12px; } .usuario-foto-preview { width: 56px; height: 56px; } }
+
 </style>
 
 
@@ -6369,110 +6384,45 @@
 
 
     <form id="form-usuario" onsubmit="salvarUsuario(event)">
-
-
       <input type="hidden" id="form-usuario-id">
-
-
-      <div class="form-group">
-
-
-        <label class="form-label">Nome *</label>
-
-
-        <input class="form-input" name="nome" required minlength="2" placeholder="Pastor João">
-
-
-      </div>
-
-
-      <div class="form-group">
-
-
-        <label class="form-label">Email *</label>
-
-
-        <input class="form-input" type="email" name="email" required placeholder="joao@igreja.com" id="form-usuario-email">
-
-
-      </div>
-
-
-      <div class="form-group" id="form-usuario-senha-group">
-
-
-        <label class="form-label">Senha *</label>
-
-
-        <input class="form-input" type="password" name="senha" minlength="6" placeholder="Minimo 6 caracteres" id="form-usuario-senha">
-
-
-      </div>
-
-
-      <div class="form-row">
-
-
-        <div class="form-group">
-
-
-          <label class="form-label">Role *</label>
-
-
-          <select class="form-select" name="role" id="form-usuario-role">
-
-
-            <option value="membro">Membro</option>
-
-
-            <option value="lider">Líder</option>
-
-
-            <option value="pastor">Pastor</option>
-
-
-            <option value="admin">Admin</option>
-
-
-          </select>
-
-
+      <div class="usuario-bloco">
+        <div class="usuario-bloco-header"><span class="icon">🔐</span> Dados de Acesso</div>
+        <div class="form-group"><label class="form-label">Nome Completo *</label><input class="form-input" name="nome" required minlength="2" placeholder="Pastor João"></div>
+        <div class="form-group"><label class="form-label">E-mail de Login *</label><input class="form-input" type="email" name="email" required placeholder="joao@igreja.com" id="form-usuario-email"></div>
+        <div class="form-group" id="form-usuario-senha-group"><label class="form-label">Senha de Acesso *</label><input class="form-input" type="password" name="senha" minlength="6" placeholder="Minimo 6 caracteres" id="form-usuario-senha"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Nível de Permissão *</label><select class="form-select" name="role" id="form-usuario-role"><option value="membro">Membro</option><option value="lider">Líder</option><option value="pastor">Pastor</option><option value="admin">Admin</option></select></div>
+          <div class="form-group"><label class="form-label">Igreja</label><select class="form-select" name="igreja_id" id="select-igreja-usuario"><option value="">Nenhuma (apenas admin)</option></select></div>
         </div>
-
-
-        <div class="form-group">
-
-
-          <label class="form-label">Igreja</label>
-
-
-          <select class="form-select" name="igreja_id" id="select-igreja-usuario">
-
-
-            <option value="">Nenhuma (apenas admin)</option>
-
-
-          </select>
-
-
-        </div>
-
-
       </div>
-
-
+      <div class="usuario-bloco">
+        <div class="usuario-bloco-header"><span class="icon">🕊️</span> Perfil Pastoral</div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Cargo Eclesiástico</label><select class="form-select" name="cargo_eclesiastico" id="select-cargo-usuario"><option value="">— Selecione —</option><option value="Membro">Membro</option><option value="Visitante">Visitante</option><option value="Congregado">Congregado</option><option value="Cooperador">Cooperador(a)</option><option value="Obreiro">Obreiro(a)</option><option value="Auxiliar">Auxiliar</option><option value="Diácono">Diácono / Diaconisa</option><option value="Presbítero">Presbítero / Ancião</option><option value="Evangelista">Evangelista</option><option value="Pastor">Pastor / Pastora</option><option value="Missionário">Missionário(a)</option><option value="Secretário">Secretário(a)</option><option value="Tesoureiro">Tesoureiro(a)</option><option value="Líder de Louvor">Líder de Louvor</option><option value="Líder de Jovens">Líder de Jovens</option><option value="Líder de Adolescentes">Líder de Adolescentes</option><option value="Líder de Crianças">Líder de Crianças</option><option value="Líder de Célula">Líder de Célula</option><option value="Líder de Ministério">Líder de Ministério</option><option value="Professor de EBD">Professor(a) de EBD</option><option value="Coordenador">Coordenador(a)</option><option value="Supervisor">Supervisor(a)</option><option value="Outro">Outro</option></select></div>
+          <div class="form-group"><label class="form-label">Data de Nascimento</label><input type="date" class="form-input" name="data_nascimento"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Telefone / WhatsApp</label><input class="form-input" name="telefone" placeholder="(11) 99999-9999"></div>
+          <div class="form-group"><label class="form-label">Data de Filiação</label><input type="date" class="form-input" name="data_filiacao"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Membro?</label><select class="form-select" name="membro"><option value="true">Sim</option><option value="false">Não</option></select></div>
+          <div class="form-group"><label class="form-label">Batizado?</label><select class="form-select" name="batizado"><option value="false">Não</option><option value="true">Sim</option></select></div>
+        </div>
+        <div class="usuario-foto-area">
+          <div class="usuario-foto-preview" id="usuario-foto-preview"><span>📷</span></div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+            <label class="usuario-foto-btn" for="usuario-foto-input">📷 Escolher foto</label>
+            <input type="file" class="usuario-foto-input" id="usuario-foto-input" accept="image/*" onchange="uploadFotoUsuario(this)">
+            <button type="button" class="usuario-foto-btn remover" id="usuario-foto-remover" onclick="removerFotoUsuario()" style="display: none;">🗑 Remover</button>
+            <input type="hidden" id="form-usuario-foto-url" name="foto_url">
+          </div>
+        </div>
+      </div>
       <div class="modal-actions">
-
-
         <button type="button" class="btn btn-ghost" onclick="fecharFormUsuario()">Cancelar</button>
-
-
-        <button type="submit" class="btn btn-primary" id="btn-salvar-usuario">Criar Usuário</button>
-
-
+        <button type="submit" class="btn btn-primary" id="btn-salvar-usuario">🚀 Criar Usuário e Perfil</button>
       </div>
-
-
     </form>
 
 
@@ -11514,6 +11464,51 @@ function getFotoAvatarHtml(pessoa, classeExtra) {
   return `<div class="aniv-avatar-foto ${classeExtra || ''}"><img src="${src}" alt=""></div>`;
 }
 
+
+// ============ FOTO DE PERFIL DO USUARIO (FASE 1.5) ============
+async function uploadFotoUsuario(inputEl) {
+  const file = inputEl.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { mostrarToast("❌ Imagem maior que 5 MB", "error"); inputEl.value = ""; return; }
+  const formData = new FormData();
+  formData.append("arquivo", file);
+  formData.append("entidade_tipo", "pessoa");
+  formData.append("entidade_id", "00000000-0000-0000-0000-000000000000");
+  try {
+    const r = await fetch(`${API}/anexos/upload`, { method: "POST", headers: { "Authorization": "Bearer " + getToken() }, body: formData });
+    if (!r.ok) { const err = await r.json().catch(() => ({})); throw new Error(err.detail || "Erro no upload"); }
+    const anexo = await r.json();
+    const fotoId = "anexo:" + anexo.id;
+    document.getElementById("form-usuario-foto-url").value = fotoId;
+    renderizarPreviewFotoUsuario(fotoId);
+    document.getElementById("usuario-foto-remover").style.display = "inline-flex";
+    mostrarToast("✅ Foto carregada!", "success");
+    inputEl.value = "";
+  } catch (err) { mostrarToast("❌ " + err.message, "error"); inputEl.value = ""; }
+}
+function removerFotoUsuario() {
+  document.getElementById("form-usuario-foto-url").value = "";
+  document.getElementById("usuario-foto-preview").innerHTML = "<span>📷</span>";
+  document.getElementById("usuario-foto-remover").style.display = "none";
+}
+function renderizarPreviewFotoUsuario(fotoUrl) {
+  const preview = document.getElementById("usuario-foto-preview");
+  const btnRemover = document.getElementById("usuario-foto-remover");
+  const hidden = document.getElementById("form-usuario-foto-url");
+  if (!preview) return;
+  if (fotoUrl && fotoUrl.startsWith("anexo:")) {
+    const anexoId = fotoUrl.replace("anexo:", "");
+    preview.innerHTML = `<img src="${API}/anexos/${anexoId}/download?token=${encodeURIComponent(getToken())}" alt="">`;
+    if (btnRemover) btnRemover.style.display = "inline-flex";
+    if (hidden) hidden.value = fotoUrl;
+  } else {
+    preview.innerHTML = "<span>📷</span>";
+    if (btnRemover) btnRemover.style.display = "none";
+    if (hidden) hidden.value = "";
+  }
+}
+// ============ FIM FOTO USUARIO ============
+
 // ============ USUARIOS ============
 
 
@@ -11800,14 +11795,23 @@ function abrirFormUsuario(usuario = null) {
 
 
     document.getElementById("form-usuario-role").value = usuario.role || "membro";
-
+    
+    // FASE 1.5: Preenche campos pastorais
+    const camposPastorais = ["cargo_eclesiastico", "data_nascimento", "telefone", "data_filiacao"];
+    for (const campo of camposPastorais) {
+      const el = document.querySelector(`#form-usuario [name="${campo}"]`);
+      if (el) el.value = usuario[campo] || "";
+    }
+    const selMembro = document.querySelector('#form-usuario [name="membro"]');
+    if (selMembro) selMembro.value = usuario.membro === false ? "false" : "true";
+    const selBat = document.querySelector('#form-usuario [name="batizado"]');
+    if (selBat) selBat.value = usuario.batizado ? "true" : "false";
+    setTimeout(() => {
+      renderizarPreviewFotoUsuario(usuario.foto_url);
+    }, 50);
 
     setTimeout(() => {
-
-
       document.getElementById("select-igreja-usuario").value = usuario.igreja_id || "";
-
-
     }, 100);
 
 

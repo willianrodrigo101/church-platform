@@ -12,6 +12,7 @@ from app.core.exceptions.handlers import (
     PermissionDeniedError,
 )
 from app.modules.igreja.repository import IgrejaRepository
+from app.modules.pessoas.repository import PessoaRepository
 from app.modules.usuarios.models import TokenResetSenha, Usuario
 from app.modules.usuarios.repository import UsuarioRepository
 from app.modules.usuarios.security import (
@@ -25,6 +26,7 @@ class UsuarioService:
     def __init__(self, db: AsyncSession):
         self.repo = UsuarioRepository(db)
         self.igreja_repo = IgrejaRepository(db)
+        self.pessoa_repo = PessoaRepository(db)
         self.db = db
 
     # ============ AUTENTICACAO ============
@@ -63,6 +65,30 @@ class UsuarioService:
                 raise BusinessRuleError("Igreja informada nao existe")
             if not igreja.ativa:
                 raise BusinessRuleError("Nao e possivel vincular usuario a igreja inativa")
+
+        # FASE 1.5: Cria Pessoa automaticamente
+        pessoa_id = None
+        if role != "admin" and igreja_id:
+            pessoa_dados = {
+                "nome": dados.get("nome"),
+                "email": dados.get("email"),
+                "telefone": dados.get("telefone"),
+                "data_nascimento": dados.get("data_nascimento"),
+                "cargo_eclesiastico": dados.get("cargo_eclesiastico"),
+                "data_filiacao": dados.get("data_filiacao"),
+                "batizado": dados.get("batizado", False),
+                "membro": dados.get("membro", True),
+                "igreja_id": igreja_id,
+                "ativo": True,
+            }
+            # Limpa campos None
+            pessoa_dados = {k: v for k, v in pessoa_dados.items() if v is not None}
+            try:
+                pessoa = await self.pessoa_repo.criar(pessoa_dados)
+                pessoa_id = pessoa.id
+                dados["pessoa_id"] = pessoa_id
+            except Exception as e:
+                raise BusinessRuleError(f"Erro ao criar perfil pastoral: {str(e)}")
 
         dados["senha_hash"] = hash_senha(dados.pop("senha"))
         return await self.repo.criar(dados)

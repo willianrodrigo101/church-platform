@@ -46,6 +46,7 @@ class UsuarioResponse(BaseModel):
     role: str
     ativo: bool
     igreja_id: UUID | None = None
+    pessoa_id: UUID | None = None
     created_at: datetime
 
 

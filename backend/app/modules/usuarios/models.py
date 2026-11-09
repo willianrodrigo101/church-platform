@@ -23,7 +23,14 @@ class Usuario(Base, UUIDMixin, TimestampMixin):
     role: Mapped[str] = mapped_column(String(20), nullable=False, default="membro")
     ativo: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False, index=True)
 
+    pessoa_id: Mapped["PGUUID | None"] = mapped_column(
+        PGUUID(as_uuid=True),
+        ForeignKey("pessoas.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     igreja = relationship("Igreja", lazy="joined")
+    pessoa = relationship("Pessoa", lazy="joined")
 
     def __repr__(self) -> str:
         return f"<Usuario {self.email} ({self.role})>"
