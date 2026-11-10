@@ -1,4 +1,4 @@
-import uuid
+﻿import uuid
 from datetime import date
 from pathlib import Path
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,7 +28,6 @@ class DocumentoService:
         conteudo_extra = dados.get("conteudo", "")
         data_hoje = date.today().strftime('%d/%m/%Y')
 
-        # --- CABEÇALHO PADRÃO ---
         header_html = """
         <div style="text-align: center; font-family: Helvetica, sans-serif; margin-bottom: 30px;">
             <h1 style="margin: 0; font-size: 18px;">CASA DE ORAÇÃO EVANGÉLICA DE TODOS OS POVOS</h1>
@@ -37,7 +36,6 @@ class DocumentoService:
         </div>
         """
 
-        # --- ASSINATURAS PADRÃO ---
         footer_html = f"""
         <div style="margin-top: 50px; text-align: center; font-family: Helvetica, sans-serif; font-size: 12px;">
             <table style="width: 100%; border-collapse: collapse;">
@@ -72,7 +70,6 @@ class DocumentoService:
             <p>Por ser verdade, firmamos a presente recomendação.</p>
             <p style="margin-top: 30px;">Itajaí – SC, {data_hoje}.</p>
             """
-            
         elif tipo == "desligamento":
             body_html = f"""
             <p>À Diretoria e liderança da Casa de Oração Evangélica de Todos os Povos</p>
@@ -86,7 +83,6 @@ class DocumentoService:
             <p style="text-align: center;">Nome completo: {pessoa.nome}</p>
             <p style="text-align: center;">Telefone/Contato: {pessoa.telefone or '____________________'}</p>
             """
-            
         elif tipo == "batismo":
             body_html = f"""
             <div style="text-align: center; margin-top: 50px;">
@@ -100,15 +96,46 @@ class DocumentoService:
                 <p>Data: {data_hoje}</p>
             </div>
             """
-            footer_html = "" # Certificado não usa o rodapé grande
-            
+            footer_html = ""
         elif tipo == "cargo":
             body_html = f"""
             <p>Declaramos para os devidos fins que o(a) irmão(ã) <b>{pessoa.nome}</b>, portador(a) do CPF {pessoa.cpf or '____________________'}, foi separado(a) e empossado(a) no cargo de <b>{conteudo_extra or 'NOVO CARGO'}</b>.</p>
             <p>Que o Senhor o(a) abençoe nesta nova etapa de serviço e dedicação à Sua obra, concedendo sabedoria e graça para desempenhar o ministério com fidelidade.</p>
             <p style="margin-top: 30px;">Itajaí – SC, {data_hoje}.</p>
             """
-            
+        elif tipo == "membresia":
+            body_html = f"""
+            <h2 style="text-align: center; font-size: 22px; margin-bottom: 30px;">CARTA DE MEMBRESIA</h2>
+            <p>Aos que esta carta lerem, graça e paz.</p>
+            <p>Declaramos para os devidos fins que os irmãos:</p>
+            <h3 style="text-align: center; margin: 20px 0;">{pessoa.nome}</h3>
+            <p>foram recebidos como membros do Ministério Casa de Oração Evangélica de Todos os Povos, no dia {data_hoje}, passando a fazer parte desta congregação, com compromisso de comunhão, serviço, fé e crescimento espiritual na presença de Deus.</p>
+            <p>Esta carta é emitida em reconhecimento à membresia dos irmãos junto ao ministério, de acordo com os princípios da Palavra de Deus e da comunhão cristã.</p>
+            <p>Sem mais para o momento, declaramos nossa alegria em recebê-los como parte desta família de fé, desejando que o Senhor Jesus Cristo continue abençoando suas vidas.</p>
+            <p style="margin-top: 30px; font-style: italic; text-align: center;">"Assim nós, que somos muitos, somos um só corpo em Cristo, mas individualmente somos membros uns dos outros." Romanos 12:5</p>
+            <p style="margin-top: 30px;">Itajaí/SC, {data_hoje}.</p>
+            """
+        elif tipo == "mudanca":
+            body_html = f"""
+            <h2 style="text-align: center; font-size: 22px; margin-bottom: 30px;">CARTA DE MUDANÇA</h2>
+            <p>À IGREJA CASA DE ORAÇÃO EVANGÉLICA DE TODOS OS POVOS</p>
+            <p>Pela presente, certificamos que o(a) irmão(ã) <b>{pessoa.nome}</b>, portador(a) do CPF nº <b>{pessoa.cpf or '____________________'}</b>, membro em plena comunhão desta igreja, encontra-se em situação regular e desejando, por motivo de mudança ministerial, passar a congregar e servir a Deus junto à Casa de Oração Evangélica de Todos os Povos.</p>
+            <p>Recomendamos o(a) referido(a) irmão(ã) com alegria e confiança, rogando ao Senhor que continue abençoando sua vida espiritual, familiar e ministerial nesta nova etapa de caminhada cristã.</p>
+            <p>Que a graça e a paz de Cristo Jesus estejam sobre todos.</p>
+            <p style="margin-top: 40px;">_____________________________________<br>Pastor Presidente</p>
+            <p style="margin-top: 20px;">_____________________________________<br>Secretário(a)</p>
+            """
+            footer_html = ""
+        elif tipo == "apresentacao":
+            body_html = f"""
+            <h2 style="text-align: center; font-size: 22px; margin-bottom: 30px;">APRESENTAÇÃO DE CRIANÇA</h2>
+            <p>A paz do Senhor, igreja! Queridos irmãos e familiares, estamos reunidos diante de Deus para um momento muito especial: a apresentação da criança.</p>
+            <p>Hoje, seus pais vêm à presença do Senhor e da igreja para agradecer pela vida desta criança e declarar o desejo de criá-la nos caminhos de Deus. Os filhos são herança do Senhor e uma bênção confiada aos cuidados da família.</p>
+            <p><b>Leitura bíblica:</b> Marcos 10:14: "Deixai vir a mim os pequeninos e não os impeçais, porque dos tais é o Reino de Deus."</p>
+            <p>Jesus demonstrou amor e cuidado pelas crianças. Ele as recebeu e as abençoou. Por isso, apresentamos esta criança ao Senhor em oração, reconhecendo o valor de sua vida e nossa necessidade da graça de Deus para cuidar dela.</p>
+            <p><b>Oração de apresentação:</b> Senhor nosso Deus e Pai, nós Te agradecemos pela vida desta criança. Neste momento, nós a apresentamos diante de Ti e pedimos que a Tua mão esteja sobre ela todos os dias. Concede-lhe saúde, proteção, sabedoria e crescimento. Guarda seus passos e cerca sua vida com o Teu cuidado. Abençoa seus pais; dá-lhes amor, paciência, discernimento e força para educar sua filha segundo os Teus ensinamentos. Que nunca faltem neste lar a fé, a união, a oração e a Tua presença. Em nome de Jesus. Amém.</p>
+            """
+            footer_html = ""
         else:
             body_html = f"""
             <h2 style="text-align: center;">{dados['titulo'].upper()}</h2>
@@ -116,7 +143,6 @@ class DocumentoService:
             <p>{conteudo_extra or 'Documento emitido pela igreja.'}</p>
             """
 
-        # --- HTML FINAL ---
         html_completo = f"""
         <html>
         <head>
@@ -134,14 +160,12 @@ class DocumentoService:
         </html>
         """
 
-        # --- CONVERTE PARA PDF ---
         with open(pdf_path, "wb") as pdf_file:
             pisa_status = pisa.CreatePDF(html_completo, dest=pdf_file)
         
         if pisa_status.err:
             raise BusinessRuleError("Erro ao gerar o PDF.")
 
-        # --- SALVA NO BANCO ---
         doc = Documento(
             igreja_id=igreja_id,
             pessoa_id=pessoa.id,
