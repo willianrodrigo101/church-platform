@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 
 <html lang="pt-BR">
@@ -13932,6 +13932,10 @@ function renderizarPerfil() {
   const tags = [];
 
 
+  if (p.cargo_eclesiastico) {
+    const cargoClass = p.cargo_eclesiastico.toLowerCase().replace(/[\s\/]+/g, '-');
+    tags.push(`<span class="cargo-badge ${cargoClass}">${p.cargo_eclesiastico}</span>`);
+  }
   tags.push(`<span class="card-tag ${p.membro ? 'membro' : 'visitante'}">${p.membro ? 'Membro' : 'Visitante'}</span>`);
 
 
@@ -14113,6 +14117,8 @@ function renderizarCorpoPerfil() {
 
 
       ["Nascimento", p.data_nascimento ? new Date(p.data_nascimento + "T00:00:00").toLocaleDateString("pt-BR") : null],
+      ["Cargo Eclesiástico", p.cargo_eclesiastico],
+      ["Data de Filiação", p.data_filiacao ? new Date(p.data_filiacao + "T00:00:00").toLocaleDateString("pt-BR") : null],
 
 
       ["Endereço", p.endereco],
