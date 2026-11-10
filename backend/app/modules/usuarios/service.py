@@ -69,15 +69,30 @@ class UsuarioService:
         # FASE 1.5: Cria Pessoa automaticamente
         pessoa_id = None
         if role != "admin" and igreja_id:
+            # Helpers locais para normalizar dados do frontend
+            def _s(v):
+                if v is None or v == "":
+                    return None
+                return v.strip() if isinstance(v, str) else v
+            
+            def _b(v, padrao=False):
+                if v is None or v == "":
+                    return padrao
+                if isinstance(v, bool):
+                    return v
+                if isinstance(v, str):
+                    return v.lower() in ("true", "1", "sim", "yes", "on")
+                return bool(v)
+            
             pessoa_dados = {
-                "nome": dados.get("nome"),
-                "email": dados.get("email"),
-                "telefone": dados.get("telefone"),
-                "data_nascimento": dados.get("data_nascimento"),
-                "cargo_eclesiastico": dados.get("cargo_eclesiastico"),
-                "data_filiacao": dados.get("data_filiacao"),
-                "batizado": dados.get("batizado", False),
-                "membro": dados.get("membro", True),
+                "nome": _s(dados.get("nome")),
+                "email": _s(dados.get("email")),
+                "telefone": _s(dados.get("telefone")),
+                "data_nascimento": _s(dados.get("data_nascimento")),
+                "cargo_eclesiastico": _s(dados.get("cargo_eclesiastico")),
+                "data_filiacao": _s(dados.get("data_filiacao")),
+                "batizado": _b(dados.get("batizado"), False),
+                "membro": _b(dados.get("membro"), True),
                 "igreja_id": igreja_id,
                 "ativo": True,
             }
