@@ -4834,6 +4834,90 @@
   .usuario-foto-input { display: none; }
   @media (max-width: 640px) { .usuario-bloco { padding: 14px 12px 6px 12px; } .usuario-foto-preview { width: 56px; height: 56px; } }
 
+
+  /* ============ FASE 2: DOCUMENTOS ============ */
+  .doc-form-bloco {
+    margin-bottom: 18px;
+    padding: 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+  .doc-form-titulo {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .doc-tipo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .doc-tipo-btn {
+    padding: 14px 12px;
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--text);
+    text-align: left;
+    transition: all 0.15s;
+  }
+  .doc-tipo-btn:hover { border-color: var(--accent); }
+  .doc-tipo-btn.ativo {
+    border-color: var(--accent);
+    background: rgba(99, 102, 241, 0.1);
+  }
+  .doc-tipo-btn .doc-tipo-icon { font-size: 22px; margin-bottom: 4px; display: block; }
+  .doc-tipo-btn .doc-tipo-label { font-size: 13px; font-weight: 600; }
+  .doc-tipo-btn .doc-tipo-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  .doc-preview-card {
+    padding: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-top: 12px;
+  }
+  .doc-preview-linha {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+  }
+  .doc-preview-linha:last-child { border-bottom: none; }
+  .doc-preview-label { color: var(--text-muted); }
+  .doc-preview-valor { font-weight: 600; }
+
+  .doc-resultado {
+    padding: 16px;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 10px;
+    margin-top: 12px;
+    text-align: center;
+  }
+  .doc-resultado .codigo {
+    font-family: monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--success);
+    letter-spacing: 2px;
+    margin: 8px 0;
+  }
+
+  @media (max-width: 640px) {
+    .doc-tipo-grid { grid-template-columns: 1fr; }
+  }
+
 </style>
 
 
@@ -11508,6 +11592,102 @@ function renderizarPreviewFotoUsuario(fotoUrl) {
   }
 }
 // ============ FIM FOTO USUARIO ============
+
+
+// ============ FASE 2: DOCUMENTOS ============
+let docPessoaAtual = null;
+
+function abrirFormDocumento(pessoaId) {
+  docPessoaAtual = pessoaId;
+  document.getElementById("doc-pessoa-id").value = pessoaId;
+  document.getElementById("doc-tipo-selecionado").value = "recomendacao";
+  document.getElementById("form-documento").reset();
+  document.getElementById("doc-resultado-area").innerHTML = "";
+  // Reseleciona recomendacao
+  document.querySelectorAll(".doc-tipo-btn").forEach(b => b.classList.remove("ativo"));
+  document.querySelector('.doc-tipo-btn[data-tipo="recomendacao"]').classList.add("ativo");
+  atualizarPreviewDoc();
+  document.getElementById("modal-form-documento").classList.add("active");
+}
+
+function fecharFormDocumento() {
+  document.getElementById("modal-form-documento").classList.remove("active");
+}
+
+function escolherTipoDoc(btn) {
+  document.querySelectorAll(".doc-tipo-btn").forEach(b => b.classList.remove("ativo"));
+  btn.classList.add("ativo");
+  document.getElementById("doc-tipo-selecionado").value = btn.dataset.tipo;
+  atualizarPreviewDoc();
+}
+
+function atualizarPreviewDoc() {
+  const p = pessoaPerfilAtual;
+  if (!p) return;
+  const tipo = document.getElementById("doc-tipo-selecionado").value;
+  const titulos = {
+    recomendacao: "Carta de Recomendação",
+    desligamento: "Carta de Desligamento",
+    batismo: "Certificado de Batismo",
+    cargo: "Certificado de Troca de Cargo",
+  };
+  document.getElementById("doc-preview").innerHTML = `
+    <div class="doc-preview-card">
+      <div class="doc-preview-linha"><span class="doc-preview-label">Tipo:</span><span class="doc-preview-valor">${titulos[tipo] || tipo}</span></div>
+      <div class="doc-preview-linha"><span class="doc-preview-label">Nome:</span><span class="doc-preview-valor">${p.nome}</span></div>
+      <div class="doc-preview-linha"><span class="doc-preview-label">Cargo:</span><span class="doc-preview-valor">${p.cargo_eclesiastico || "Membro"}</span></div>
+      <div class="doc-preview-linha"><span class="doc-preview-label">Igreja:</span><span class="doc-preview-valor">${p.igreja?.nome || "—"}</span></div>
+    </div>
+  `;
+}
+
+async function salvarDocumento(e) {
+  e.preventDefault();
+  const btn = document.getElementById("btn-gerar-doc");
+  btn.disabled = true; const txt = btn.textContent; btn.textContent = "Gerando...";
+
+  const pessoaId = document.getElementById("doc-pessoa-id").value;
+  const tipo = document.getElementById("doc-tipo-selecionado").value;
+  const conteudo = document.querySelector('#form-documento [name="conteudo"]').value;
+
+  const titulos = {
+    recomendacao: "Carta de Recomendação",
+    desligamento: "Carta de Desligamento",
+    batismo: "Certificado de Batismo",
+    cargo: "Certificado de Troca de Cargo",
+  };
+  const titulo = titulos[tipo] || tipo;
+
+  try {
+    const r = await apiFetch(`${API}/documentos/gerar`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        pessoa_id: pessoaId,
+        tipo: tipo,
+        titulo: titulo,
+        conteudo: conteudo || null,
+      }),
+    });
+    const d = await r.json();
+
+    document.getElementById("doc-resultado-area").innerHTML = `
+      <div class="doc-resultado">
+        <div style="font-size: 28px;">✅</div>
+        <div style="margin-top: 6px; font-weight: 700;">Documento gerado!</div>
+        <div class="codigo">${d.codigo_validacao}</div>
+        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Código de validação</div>
+        <a href="http://localhost:8000${d.pdf_url}" target="_blank" class="btn btn-primary" style="display: inline-block; padding: 10px 20px;">📄 Abrir PDF</a>
+      </div>
+    `;
+    mostrarToast("✅ Documento gerado com sucesso!", "success");
+    btn.disabled = false; btn.textContent = txt;
+  } catch (err) {
+    mostrarToast("❌ " + err.message, "error");
+    btn.disabled = false; btn.textContent = txt;
+  }
+}
+// ============ FIM FASE 2 ============
 
 // ============ USUARIOS ============
 
@@ -22966,6 +23146,63 @@ if (getToken() && getUser()) {
   <button class="drawer-mobile-item" data-tab="estudo" onclick="irParaAba('estudo')">📚 Estudo</button>
   <button class="drawer-mobile-item" data-tab="usuarios" onclick="irParaAba('usuarios')" id="drawer-item-usuarios" style="display:none;">👤 Usuários</button>
 </aside>
+
+
+  <!-- ============ FASE 2: MODAL GERAR DOCUMENTO ============ -->
+  <div class="modal-backdrop" id="modal-form-documento">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">📄 Gerar Documento</h2>
+        <button class="modal-close" onclick="fecharFormDocumento()">×</button>
+      </div>
+      <form id="form-documento" onsubmit="salvarDocumento(event)">
+        <input type="hidden" id="doc-pessoa-id">
+        <input type="hidden" id="doc-tipo-selecionado" value="recomendacao">
+
+        <div class="doc-form-bloco">
+          <div class="doc-form-titulo">📌 Tipo de Documento</div>
+          <div class="doc-tipo-grid">
+            <button type="button" class="doc-tipo-btn ativo" data-tipo="recomendacao" onclick="escolherTipoDoc(this)">
+              <span class="doc-tipo-icon">📜</span>
+              <span class="doc-tipo-label">Recomendação</span>
+              <span class="doc-tipo-desc">Para mudança ou viagem</span>
+            </button>
+            <button type="button" class="doc-tipo-btn" data-tipo="desligamento" onclick="escolherTipoDoc(this)">
+              <span class="doc-tipo-icon">📋</span>
+              <span class="doc-tipo-label">Desligamento</span>
+              <span class="doc-tipo-desc">Saída em paz da igreja</span>
+            </button>
+            <button type="button" class="doc-tipo-btn" data-tipo="batismo" onclick="escolherTipoDoc(this)">
+              <span class="doc-tipo-icon">💧</span>
+              <span class="doc-tipo-label">Batismo</span>
+              <span class="doc-tipo-desc">Certificado de batismo</span>
+            </button>
+            <button type="button" class="doc-tipo-btn" data-tipo="cargo" onclick="escolherTipoDoc(this)">
+              <span class="doc-tipo-icon">🎖️</span>
+              <span class="doc-tipo-label">Troca de Cargo</span>
+              <span class="doc-tipo-desc">Novo cargo eclesiástico</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="doc-form-bloco">
+          <div class="doc-form-titulo">👤 Dados do Documento</div>
+          <div id="doc-preview"></div>
+          <div class="form-group" style="margin-top: 14px;">
+            <label class="form-label">Conteúdo / Observações (opcional)</label>
+            <textarea class="form-input" name="conteudo" rows="3" placeholder="Texto adicional que aparecerá no documento..."></textarea>
+          </div>
+        </div>
+
+        <div id="doc-resultado-area"></div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" onclick="fecharFormDocumento()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-gerar-doc">📄 Gerar PDF</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
 </body>
 

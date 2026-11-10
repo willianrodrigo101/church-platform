@@ -1,4 +1,4 @@
-﻿import asyncio
+import asyncio
 import sys
 from logging.config import fileConfig
 from alembic import context
@@ -20,6 +20,7 @@ from app.modules.eventos import models  # noqa: F401
 from app.modules.jornada import models  # noqa: F401
 from app.modules.anexos import models  # noqa: F401
 from app.modules.estudo import models  # noqa: F401
+from app.modules.documentos import models as documentos_models  # noqa: F401
 
 config = context.config
 if config.config_file_name is not None:
