@@ -11677,7 +11677,7 @@ async function salvarDocumento(e) {
         <div style="margin-top: 6px; font-weight: 700;">Documento gerado!</div>
         <div class="codigo">${d.codigo_validacao}</div>
         <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">Código de validação</div>
-        <a href="http://localhost:8000${d.pdf_url}" target="_blank" class="btn btn-primary" style="display: inline-block; padding: 10px 20px;">📄 Abrir PDF</a>
+        <a href="${API.replace('/api/v1', '')}${d.pdf_url}" target="_blank" class="btn btn-primary" style="display: inline-block; padding: 10px 20px;">📄 Abrir PDF</a>
       </div>
     `;
     mostrarToast("✅ Documento gerado com sucesso!", "success");
