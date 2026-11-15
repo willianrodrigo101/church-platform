@@ -22,5 +22,5 @@ RUN mkdir -p /app/media/certificados /app/uploads
 EXPOSE 8000
 
 # Roda migrations e sobe o uvicorn
-CMD sh -c "sleep 15 && rm -f /app/.env && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
+CMD sh -c "sleep 15 && rm -f /app/.env && python -m alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
 
