@@ -22,5 +22,5 @@ RUN mkdir -p /app/media/certificados /app/uploads
 EXPOSE 8000
 
 # Roda migrations e sobe o uvicorn
-CMD sh -c "until pg_isready -h $POSTGRES_HOST -p 5432 -U $POSTGRES_USER; do echo 'Aguardando banco de dados...'; sleep 2; done; rm -f /app/.env && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
+CMD sh -c "until python -c \"import psycopg2; psycopg2.connect(os.environ[\"DATABASE_URL\"]).close()\" 2>/dev/null; do echo 'Aguardando banco...'; sleep 2; done; rm -f /app/.env && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
 
