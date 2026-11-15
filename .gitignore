@@ -6,3 +6,5 @@
 .env
 *.db
 *.sqlite3
+backend/uploads/
+*.bak.*
