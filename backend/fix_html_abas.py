@@ -1,4 +1,4 @@
-"""Fix — insere os blocos HTML de Certificados e Ferramentas."""
+﻿"""Fix — insere os blocos HTML de Certificados e Ferramentas."""
 import re
 from pathlib import Path
 

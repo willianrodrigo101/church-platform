@@ -1,4 +1,4 @@
-"""Frontend de Anexos: componente reutilizavel + integracao no perfil da pessoa."""
+﻿"""Frontend de Anexos: componente reutilizavel + integracao no perfil da pessoa."""
 import shutil
 from datetime import datetime
 from pathlib import Path

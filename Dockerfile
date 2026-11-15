@@ -1,21 +1,21 @@
-FROM python:3.12-slim
+ï»¿FROM python:3.12-slim
 
 WORKDIR /app
 
-# Instala dependências do sistema
+# Instala dependï¿½ncias do sistema
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc libpq-dev curl libcairo2 libpango-1.0-0 libpangocairo-1.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copia o requirements e instala as dependências Python
+# Copia o requirements e instala as dependï¿½ncias Python
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia o código da aplicação
+# Copia o cï¿½digo da aplicaï¿½ï¿½o
 COPY backend/ .
 
-# Cria pastas de mídia
+# Cria pastas de mï¿½dia
 RUN mkdir -p /app/media/certificados /app/uploads
 
-# Comando de inicialização (espera o banco, roda migrações e sobe o uvicorn)
+# Comando de inicializaï¿½ï¿½o (espera o banco, roda migraï¿½ï¿½es e sobe o uvicorn)
 CMD sh -c "sleep 15 && python -m alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"

@@ -1,4 +1,4 @@
-"""Adiciona aba Jornada ao frontend (CRUD de trilhas)."""
+﻿"""Adiciona aba Jornada ao frontend (CRUD de trilhas)."""
 import shutil
 from datetime import datetime
 from pathlib import Path

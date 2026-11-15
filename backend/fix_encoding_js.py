@@ -1,4 +1,4 @@
-"""Remove emojis e caracteres non-ASCII do JavaScript (dentro de <script>)."""
+﻿"""Remove emojis e caracteres non-ASCII do JavaScript (dentro de <script>)."""
 import re
 from pathlib import Path
 

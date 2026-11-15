@@ -1,4 +1,4 @@
-"""
+﻿"""
 setup_fase15_fix_perfil.py
 --------------------------
 Corrige:

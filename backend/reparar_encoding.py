@@ -1,4 +1,4 @@
-"""Repara mojibake no index.html (UTF-8 lido como Latin-1, uma ou mais vezes)."""
+﻿"""Repara mojibake no index.html (UTF-8 lido como Latin-1, uma ou mais vezes)."""
 import shutil
 from datetime import datetime
 from pathlib import Path

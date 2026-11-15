@@ -1,4 +1,4 @@
-"""Estudo Bloco 3 — Quizzes + Forum + Badges."""
+﻿"""Estudo Bloco 3 — Quizzes + Forum + Badges."""
 import argparse, shutil
 from datetime import datetime
 from pathlib import Path

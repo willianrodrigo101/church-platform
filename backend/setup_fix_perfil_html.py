@@ -1,4 +1,4 @@
-"""
+﻿"""
 setup_fix_perfil_html.py
 ------------------------
 Adiciona cargo + data_filiacao na tela de perfil (frontend apenas).

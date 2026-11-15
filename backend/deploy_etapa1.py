@@ -1,4 +1,4 @@
-"""Deploy Etapa 1 — Backend serve o frontend na mesma porta."""
+﻿"""Deploy Etapa 1 — Backend serve o frontend na mesma porta."""
 import re
 import shutil
 from datetime import datetime

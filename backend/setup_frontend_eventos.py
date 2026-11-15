@@ -1,4 +1,4 @@
-"""Adiciona aba Eventos ao frontend."""
+﻿"""Adiciona aba Eventos ao frontend."""
 import shutil
 from datetime import datetime
 from pathlib import Path

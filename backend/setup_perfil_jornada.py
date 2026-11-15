@@ -1,4 +1,4 @@
-"""Adiciona aba Jornada no perfil da pessoa + botao iniciar trilha."""
+﻿"""Adiciona aba Jornada no perfil da pessoa + botao iniciar trilha."""
 import shutil
 from datetime import datetime
 from pathlib import Path

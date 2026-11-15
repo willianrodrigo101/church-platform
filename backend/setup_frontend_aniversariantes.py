@@ -1,4 +1,4 @@
-"""Frontend de aniversariantes: card no dashboard + badge no sino + 🎂 no card."""
+﻿"""Frontend de aniversariantes: card no dashboard + badge no sino + 🎂 no card."""
 import shutil
 from datetime import datetime
 from pathlib import Path

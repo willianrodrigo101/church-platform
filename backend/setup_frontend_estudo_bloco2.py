@@ -1,4 +1,4 @@
-"""Frontend do modulo Estudo — Bloco 2: Turmas, Matriculas, Presencas."""
+﻿"""Frontend do modulo Estudo — Bloco 2: Turmas, Matriculas, Presencas."""
 import shutil
 from datetime import datetime
 from pathlib import Path

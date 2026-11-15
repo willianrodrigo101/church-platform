@@ -1,4 +1,4 @@
-code .\setup_frontend_estudo_bloco3.py
+﻿code .\setup_frontend_estudo_bloco3.py
 """Frontend do modulo Estudo — Bloco 3: Quizzes + Forum + Badges + Gamificacao."""
 import shutil
 from datetime import datetime

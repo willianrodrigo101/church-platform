@@ -1,4 +1,4 @@
-"""Conserta encoding do index.html: Latin-1 -> UTF-8 corretamente."""
+﻿"""Conserta encoding do index.html: Latin-1 -> UTF-8 corretamente."""
 from pathlib import Path
 import re
 

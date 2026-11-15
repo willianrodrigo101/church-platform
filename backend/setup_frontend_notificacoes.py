@@ -1,4 +1,4 @@
-"""Adiciona sininho de notificacoes no header do frontend."""
+﻿"""Adiciona sininho de notificacoes no header do frontend."""
 import shutil
 from datetime import datetime
 from pathlib import Path

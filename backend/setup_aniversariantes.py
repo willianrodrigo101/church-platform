@@ -1,4 +1,4 @@
-"""Adiciona endpoint de aniversariantes (hoje + proximos 7 dias)."""
+﻿"""Adiciona endpoint de aniversariantes (hoje + proximos 7 dias)."""
 import argparse, shutil
 from datetime import datetime
 from pathlib import Path

@@ -1,4 +1,4 @@
-"""Modulo Estudo — Bloco 2: Turmas, Matriculas, Progresso, Presencas."""
+﻿"""Modulo Estudo — Bloco 2: Turmas, Matriculas, Progresso, Presencas."""
 import argparse, shutil
 from datetime import datetime
 from pathlib import Path

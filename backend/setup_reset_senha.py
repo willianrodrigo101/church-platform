@@ -1,4 +1,4 @@
-"""Setup do fluxo de Reset de Senha."""
+﻿"""Setup do fluxo de Reset de Senha."""
 import argparse, shutil
 from datetime import datetime
 from pathlib import Path

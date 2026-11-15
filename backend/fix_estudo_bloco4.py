@@ -1,4 +1,4 @@
-"""Fix Bloco 4 — adiciona Anotacao + FerramentaEstudo + registra router_publico."""
+﻿"""Fix Bloco 4 — adiciona Anotacao + FerramentaEstudo + registra router_publico."""
 import shutil
 from datetime import datetime
 from pathlib import Path

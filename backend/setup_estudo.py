@@ -1,4 +1,4 @@
-"""Modulo Estudo — Bloco 1: Trilhas, Cursos, Modulos e Conteudos."""
+﻿"""Modulo Estudo — Bloco 1: Trilhas, Cursos, Modulos e Conteudos."""
 import argparse, shutil
 from datetime import datetime
 from pathlib import Path
