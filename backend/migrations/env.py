@@ -1,59 +1,43 @@
 import asyncio
-import sys
+import os
 from logging.config import fileConfig
-from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-
-if sys.platform == "win32":
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
-from app.core.config.settings import settings
-from app.core.database.base import Base
-from app.modules.igreja import models  # noqa: F401
-from app.modules.pessoas import models  # noqa: F401
-from app.modules.usuarios import models  # noqa: F401
-from app.modules.cuidado import models  # noqa: F401
-from app.modules.oracao import models  # noqa: F401
-from app.modules.eventos import models  # noqa: F401
-from app.modules.jornada import models  # noqa: F401
-from app.modules.anexos import models  # noqa: F401
-from app.modules.estudo import models  # noqa: F401
-from app.modules.documentos import models as documentos_models  # noqa: F401
+from alembic import context
+from app.models.base import Base  # Ajuste se o import do seu Base for diferente
 
 config = context.config
-import os
-_db_url = os.getenv('DATABASE_URL')
-if _db_url:
-    config.set_main_option('sqlalchemy.url', _db_url)
+
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 target_metadata = Base.metadata
 
+# Lê a DATABASE_URL e força o driver asyncpg
+db_url = os.getenv("DATABASE_URL")
+if db_url:
+    if db_url.startswith("postgresql://"):
+        db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    elif db_url.startswith("postgresql+psycopg2://"):
+        db_url = db_url.replace("postgresql+psycopg2://", "postgresql+asyncpg://", 1)
+    config.set_main_option("sqlalchemy.url", db_url)
 
 def run_migrations_offline() -> None:
+    url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=_db_url,
+        url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
-        compare_type=True,
     )
     with context.begin_transaction():
         context.run_migrations()
-
 
 def do_run_migrations(connection: Connection) -> None:
-    context.configure(
-        connection=connection,
-        target_metadata=target_metadata,
-        compare_type=True,
-    )
+    context.configure(connection=connection, target_metadata=target_metadata)
     with context.begin_transaction():
         context.run_migrations()
-
 
 async def run_async_migrations() -> None:
     connectable = async_engine_from_config(
@@ -65,15 +49,10 @@ async def run_async_migrations() -> None:
         await connection.run_sync(do_run_migrations)
     await connectable.dispose()
 
-
 def run_migrations_online() -> None:
     asyncio.run(run_async_migrations())
-
 
 if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
-
-
-
