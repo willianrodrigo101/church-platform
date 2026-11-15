@@ -1,28 +1,21 @@
 FROM python:3.12-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
 WORKDIR /app
 
-# Dependencias de sistema
+# Instala dependências do sistema
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc libpq-dev curl libcairo2 libpango-1.0-0 libpangocairo-1.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copia a pasta backend inteira
-# force rebuild
-COPY backend/ /app/
+# Copia o requirements e instala as dependências Python
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Instala dependencias
-RUN pip install --no-cache-dir -r /app/requirements.txt
+# Copia o código da aplicação
+COPY backend/ .
 
-# Cria pasta de media e uploads
+# Cria pastas de mídia
 RUN mkdir -p /app/media/certificados /app/uploads
 
-EXPOSE 8000
-
-# Roda migrations e sobe o uvicorn
-CMD sh -c "sleep 15 && rm -f /app/.env && python -m alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
-
-
+# Comando de inicialização (espera o banco, roda migrações e sobe o uvicorn)
+CMD sh -c "sleep 15 && python -m alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
