@@ -23,6 +23,10 @@ from app.modules.estudo import models  # noqa: F401
 from app.modules.documentos import models as documentos_models  # noqa: F401
 
 config = context.config
+import os
+_db_url = os.getenv('DATABASE_URL')
+if _db_url:
+    config.set_main_option('sqlalchemy.url', _db_url)
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
@@ -71,3 +75,4 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
+
