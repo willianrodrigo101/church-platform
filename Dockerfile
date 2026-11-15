@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copia a pasta backend inteira
+# force rebuild
 COPY backend/ /app/
 
 # Instala dependencias
@@ -23,4 +24,5 @@ EXPOSE 8000
 
 # Roda migrations e sobe o uvicorn
 CMD sh -c "sleep 15 && rm -f /app/.env && python -m alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
+
 

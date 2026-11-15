@@ -60,3 +60,5 @@ webencodings==0.6.1
 websockets==17.2
 xhtml2pdf==0.2.28
 psycopg2-binary
+
+asyncpg==0.30.0
