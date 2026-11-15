@@ -5,7 +5,7 @@ from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
-from app.models.base import Base  # Ajuste se o import do seu Base for diferente
+from app.db.base import Base  # Ajuste se o import do seu Base for diferente
 
 config = context.config
 
@@ -56,3 +56,4 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
+
