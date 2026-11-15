@@ -30,13 +30,12 @@ if _db_url:
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-config.set_main_option("sqlalchemy.url", str(settings.DATABASE_URL))
 target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
     context.configure(
-        url=str(settings.DATABASE_URL),
+        url=_db_url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -75,4 +74,5 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
+
 
