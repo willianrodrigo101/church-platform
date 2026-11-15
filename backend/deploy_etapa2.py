@@ -1,4 +1,4 @@
-﻿"""Deploy Etapa 2 — Criar Dockerfile, docker-compose e .dockerignore."""
+"""Deploy Etapa 2 — Criar Dockerfile, docker-compose e .dockerignore."""
 from pathlib import Path
 
 BACKEND = Path(__file__).parent.resolve()

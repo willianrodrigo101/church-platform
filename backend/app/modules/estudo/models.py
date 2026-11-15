@@ -1,4 +1,4 @@
-﻿from datetime import datetime
+from datetime import datetime
 from datetime import date
 from sqlalchemy import Boolean, ForeignKey, Integer, String, Text, UniqueConstraint, DateTime
 from sqlalchemy.dialects.postgresql import UUID as PGUUID

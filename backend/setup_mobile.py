@@ -1,4 +1,4 @@
-﻿"""Adiciona responsividade mobile: menu hamburger + grids adaptáveis."""
+"""Adiciona responsividade mobile: menu hamburger + grids adaptáveis."""
 import re
 import shutil
 from datetime import datetime

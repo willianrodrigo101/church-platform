@@ -1,4 +1,4 @@
-﻿"""Setup do modulo de Notificacoes (endpoint agregador)."""
+"""Setup do modulo de Notificacoes (endpoint agregador)."""
 import argparse, shutil
 from datetime import datetime
 from pathlib import Path

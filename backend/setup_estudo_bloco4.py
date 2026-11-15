@@ -1,4 +1,4 @@
-﻿"""Estudo Bloco 4 — Certificados + Anotacoes + Ferramentas de Estudo."""
+"""Estudo Bloco 4 — Certificados + Anotacoes + Ferramentas de Estudo."""
 import argparse, shutil
 from datetime import datetime
 from pathlib import Path

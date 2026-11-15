@@ -1,4 +1,4 @@
-﻿"""Frontend do reset de senha: link no login, modal esqueci, tela reset,
+"""Frontend do reset de senha: link no login, modal esqueci, tela reset,
 botao trocar senha no perfil, botao resetar senha no admin."""
 import shutil
 from datetime import datetime

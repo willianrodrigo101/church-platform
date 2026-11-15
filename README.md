@@ -1,4 +1,4 @@
-﻿# Church Platform
+# Church Platform
 
 Plataforma modular multi-igreja para gestão pastoral.
 

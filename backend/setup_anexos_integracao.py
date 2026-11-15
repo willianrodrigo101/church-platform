@@ -1,4 +1,4 @@
-﻿"""Integra Anexos nos modais de detalhes de Eventos, Cuidado, Oracao e Jornada."""
+"""Integra Anexos nos modais de detalhes de Eventos, Cuidado, Oracao e Jornada."""
 import shutil
 from datetime import datetime
 from pathlib import Path

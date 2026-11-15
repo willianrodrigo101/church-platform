@@ -1,4 +1,4 @@
-﻿# CONTEXTO DO PROJETO — CHURCH PLATFORM
+# CONTEXTO DO PROJETO — CHURCH PLATFORM
 
 > **PARA A IA:** Leia tudo. Este documento contém o contexto e o método de
 > trabalho. Siga o mesmo estilo descrito aqui.

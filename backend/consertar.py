@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 from datetime import datetime
 
 INDEX = Path(r"C:\Users\PC\Documents\CHURCH_PLATFORM\frontend\web\index.html")

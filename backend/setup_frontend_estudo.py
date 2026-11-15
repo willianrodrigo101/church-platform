@@ -1,4 +1,4 @@
-﻿"""Frontend do modulo Estudo — Bloco 1: Trilhas, Cursos, Modulos e Conteudos."""
+"""Frontend do modulo Estudo — Bloco 1: Trilhas, Cursos, Modulos e Conteudos."""
 import shutil
 from datetime import datetime
 from pathlib import Path

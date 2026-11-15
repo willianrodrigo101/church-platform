@@ -1,4 +1,4 @@
-﻿﻿import asyncio
+﻿import asyncio
 from sqlalchemy import text
 from app.core.config.settings import settings
 from app.core.database.connection import engine

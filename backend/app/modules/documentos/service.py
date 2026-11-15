@@ -1,4 +1,4 @@
-﻿import uuid
+import uuid
 from datetime import date
 from pathlib import Path
 from sqlalchemy.ext.asyncio import AsyncSession

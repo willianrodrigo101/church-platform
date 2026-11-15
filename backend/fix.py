@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 
 WEB = Path(r"C:\Users\PC\Documents\CHURCH_PLATFORM\frontend\web")
 SAIDA = WEB / "index.html"

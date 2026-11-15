@@ -1,4 +1,4 @@
-﻿"""Remove a funcao trocarSubAbaEstudo duplicada (a antiga com 5 abas)."""
+"""Remove a funcao trocarSubAbaEstudo duplicada (a antiga com 5 abas)."""
 import re
 from pathlib import Path
 

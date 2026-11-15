@@ -1,4 +1,4 @@
-﻿"""Frontend do modulo Estudo — Bloco 4: Certificados + Anotacoes + Ferramentas."""
+"""Frontend do modulo Estudo — Bloco 4: Certificados + Anotacoes + Ferramentas."""
 import shutil
 from datetime import datetime
 from pathlib import Path

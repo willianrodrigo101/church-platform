@@ -1,4 +1,4 @@
-﻿"""Fix — adiciona sub-abas Certificados e Ferramentas na barra do Estudo."""
+"""Fix — adiciona sub-abas Certificados e Ferramentas na barra do Estudo."""
 import re
 from pathlib import Path
 

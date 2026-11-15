@@ -1,4 +1,4 @@
-﻿import logging
+import logging
 import sys
 
 from app.core.config.settings import settings

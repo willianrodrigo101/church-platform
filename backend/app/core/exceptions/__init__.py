@@ -1,4 +1,4 @@
-﻿"""Excecoes de dominio da aplicacao."""
+"""Excecoes de dominio da aplicacao."""
 from app.core.exceptions.handlers import (
     BusinessRuleError,
     NotFoundError,

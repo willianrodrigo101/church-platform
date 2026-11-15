@@ -1,4 +1,4 @@
-﻿from sqlalchemy import Boolean, String, Text
+from sqlalchemy import Boolean, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 from app.core.database.base import Base, TimestampMixin, UUIDMixin
 

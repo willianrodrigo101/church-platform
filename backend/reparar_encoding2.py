@@ -1,4 +1,4 @@
-﻿"""Reparo agressivo: tenta todos os codecs e escolhe o que mais reduz mojibake."""
+"""Reparo agressivo: tenta todos os codecs e escolhe o que mais reduz mojibake."""
 import shutil
 from datetime import datetime
 from pathlib import Path
